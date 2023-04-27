@@ -1,1 +1,0 @@
-"0","ggplot(dn, aes(x=n_words ,y=nchar/n_words))+geom_point()+theme_minimal()+geom_smooth()"

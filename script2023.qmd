@@ -2,7 +2,7 @@
 title: "PMP 40ans"
 author: "CB MB SB"
 format: html
-subtitle: "Master 2 siren 2023" 
+subtitle: "Compter les mots" 
 title-block-banner: img01.jpeg
 date: today
 execute : 
@@ -41,6 +41,9 @@ library('extrafont') #c'est pour igraph
 #loadfonts(device = "pdf") # Indiquer device = "pdf" pour produire un pdf 
 
 theme_set(theme_minimal())
+
+col<- c("#ca7dcc","#fb6a4a","orange","#67000d", "firebrick", "pink", "ivory3","skyblue")
+
 ```
 
 ## Data
@@ -59,12 +62,15 @@ dn<-PMP %>%
          Issue2=ifelse(Issue2=="1-2",1, ifelse(Issue2=="3-4",3, Issue2)),
          x=as.numeric(Issue2)/4,
          numéro=Year+x) %>%  
-  filter(!is.na(Abstract))
-table(dn$Issue2)
+  filter(Abstract!="Null") #critere du résume
 
-ggplot(dn, aes(x=nchar))+geom_histogram(binwidth = 20)+theme_minimal()
+ggplot(dn, aes(x=nchar))+geom_histogram(binwidth = 50)+theme_minimal()
 ggplot(dn, aes(x=n_words))+geom_histogram(binwidth = 20)+theme_minimal()
-ggplot(dn, aes(x=n_words ,y=nchar/n_words))+geom_point()+theme_minimal()+geom_smooth()
+ggplot(dn, aes(x=n_words ,y=nchar/n_words))+
+  geom_point()+
+  theme_minimal()+geom_smooth()+xlim(0, 750)+
+  labs(x="nombre de mots",
+       y="longueur des mots")
 ```
 
 C'est assez stable
@@ -77,10 +83,9 @@ dn_year<-dn %>%
 
 ggplot(dn_year, aes(x=Year,y=n))+
   geom_smooth(method = "loess",span=.35, color="Coral2")+
-  labs(title="Evolution du nombre d'articles par numéro",
-       y="nombre de papier",
+  labs(title="Evolution du nombre d'articles par an",
+       y="nombre de papiers",
        x="Année de publication",caption="corpus PMP")+
-  ylim(0,15)+
   scale_x_continuous(breaks=c(1980, 1985, 1990,1995,2000,2005,2010, 2015, 2020))+
   ylim(0,40)
 
@@ -106,55 +111,22 @@ ggsave("./images/evol1.jpeg", width = 27, height = 18, units = "cm")
 
 en tf idf
 
-```{r 05}
-# \u2028
-dn$text<-gsub("'"," ", dn$text)
-head(dn$text,1)
-corp <- corpus(dn$text, docvars=(dn))  # corps des auteueut
-
-
-toks <- tokens(corp, padding=TRUE)
-
-dfm <- dfm(toks)
-#quant <- dfm_trim(dfm, min_termfreq = 1, max_termfreq= 10000)
-
-tstat_freq <- as.data.frame(textstat_frequency(dfm, n=20000) )
-
-N<-as.numeric(nrow(tstat_freq))
-M=sum(tstat_freq$frequency)
-tstat_freq2<-tstat_freq %>% 
-  mutate(idf=log(N/docfreq),
-         tfidf=(frequency/M)*idf)%>%
-  filter(rank>27 & rank<200)
-
-set.seed(42)
-ggplot(tstat_freq2, aes(label = feature, size = docfreq)) +
-  geom_text_wordcloud() +
-  scale_size_area(max_size = 8) +
-  scale_color_discrete()+
-  labs(title="les mots les plus fréquents dans les titres des articles de PMP")
-
-ggsave("./images/lexic1.jpeg", width = 27, height = 18, units = "cm")
-
-
-```
-
 Avec les collocations parce que ce type de langage favorise les expressions composées : par exemple "taux d'intérêt"
 
 ```{r 06}
-
-toks <- tokens(corp, remove_punct = TRUE,padding=FALSE)
+corp<-corpus(dn$text, docvars =dn)
+toks <- tokens(corp, remove_punct = TRUE, padding=FALSE)%>% 
+ tokens_select(pattern = stopwords('french'), selection = 'remove')
 
 tstat_col_caps <- 
   tokens_select(toks, case_insensitive = FALSE,
                                 padding = FALSE) %>% 
-           textstat_collocations(min_count = 3, size=2:5)%>%
+           textstat_collocations(min_count = 5, size=2:5)%>%
   filter(lambda>8 & z>4)
 
-head(tstat_col_caps, 1000)
+head(tstat_col_caps, 10)
 
-toks_comp <- tokens_compound(toks, pattern = tstat_col_caps) %>% 
- tokens_select(pattern = stopwords('french'), selection = 'remove')
+toks_comp <- tokens_compound(toks, pattern = tstat_col_caps) 
 
 dfm <-  dfm(toks_comp)
 
@@ -162,18 +134,21 @@ tstat_freq <- as.data.frame(textstat_frequency(dfm))
 
 N<-as.numeric(nrow(tstat_freq))
 M=sum(tstat_freq$frequency)
+
 tstat_freq2<-tstat_freq %>% 
   mutate(idf=log(N/docfreq),
          tfidf=(frequency/M)*idf)%>%
-  filter(rank>27 & rank<200)
+  filter(rank>0 & rank<400)
 
 set.seed(42)
 
 ggplot(tstat_freq2, aes(label = feature, size = tfidf)) +
   geom_text_wordcloud() +
-  scale_size_area(max_size = 6) +
+  scale_size_area(max_size = 5) +
   scale_color_discrete()+
-  labs(title="les mots les plus fréquents dans les titres des articles de PMP")
+  labs(title="les 400 mots les plus fréquents dans les titres et résumés des articles de PMP",
+       subtitle = "les police sont proportionnele au tfidf de chaque terme",
+       caption="PMP data")
 
 ggsave("./images/lexic2.jpeg", width = 27, height = 18, units = "cm")
 
@@ -209,157 +184,93 @@ ggplot(tstat_freq2, aes(label = feature, size = tfidf)) +
 
 ggsave("./images/keyword0.jpeg", width = 27, height = 18, units = "cm")
 
-
 ```
 
-## Management public ou politiques publiques ?
+## Comptons les mots ?
+
+### politique et management
 
 ```{r 08}
 
-dn$keyword1<-str_count(dn$text, pattern = "[P|p]olitique.")/dn$n_words
+dn$keyword1<-str_count(dn$text, pattern = "[P|p]olitique.*\\s[P|p]ublique.*")/dn$n_words
 dn$keyword2<-str_count(dn$text, pattern = "[G|g]estion")/dn$n_words
 dn$keyword3<-str_count(dn$text, pattern = "[M|m]anagement")/dn$n_words
-dn$keyword4<-(dn$keyword2+dn$keyword3)
-
 
 foo<-dn %>% 
   group_by(Year)%>% 
-  summarise(Politique=mean(keyword1),
+  summarise(PolitiquePublique=mean(keyword1),
             Gestion=mean(keyword2),
-            Management=mean(keyword3),
-            GetM=mean(keyword4)) %>%
+            Management=mean(keyword3)) %>%
   pivot_longer(-Year, names_to = "keyword",values_to = "n")
 
 ggplot(foo, aes(x=Year, y=n, group=keyword))+
   geom_smooth(method="loess", alpha=0.1,span=0.5,aes(color=keyword))+
-  scale_color_manual(values = c("#ca7dcc",
-                                "#fb6a4a",
-                                "orange",
-                                "#67000d"))+
+  scale_color_manual(values = col)+
   scale_y_continuous(labels=scales::percent)+
-  labs(y="densité", x=NULL, title = "Performance")
+  labs(y="densité", 
+       x=NULL, 
+       title = "Fréquence des termes",
+       subtitle = "",
+       caption="PMP data")
 
 ggsave("./images/keyword1.jpeg", width = 27, height = 18, units = "cm")
 
+```
 
-dn$keyword1<-str_count(dn$text, pattern = "[U|u]niversit.*")/dn$n_words
-dn$keyword2<-str_count(dn$text, pattern = "[C|c]ollectivit.*")/dn$n_words
-dn$keyword3<-str_count(dn$text, pattern = "[H|h]ôpital.*")/dn$n_words
-dn$keyword4<-str_count(dn$text, pattern = "Etat")/dn$n_words
-dn$keyword5<-str_count(dn$text, pattern = "[E|e]urop.*")/dn$n_words
+### Institution
+
+```{r 09}
+
+dn$Collectivite<-str_count(dn$text, pattern = "[C|c]ollectivit.*")/dn$n_words
+dn$Hopital<-str_count(dn$text, pattern = "[H|h][ô|o][.|s]pital.*")/dn$n_words
+dn$Etat<-str_count(dn$text, pattern = "Etat")/dn$n_words
+dn$Europe<-str_count(dn$text, pattern = "[E|e]urop.*")/dn$n_words
+dn$Université<-str_count(dn$text,"[U|u]niversit.*")/dn$n_words
+dn$Territoire<-str_count(dn$text,"[T|t]errit[o, oi]r.*")/dn$n_words
+dn$Administration<-str_count(dn$text,"[A|a]dministrat.*")/dn$n_words
 
 foo<-dn %>% 
   group_by(Year)%>% 
-  summarise(Universite=mean(keyword1),
-            Collectivite=mean(keyword2),
-            hopital=mean(keyword3),
-            Etat=mean(keyword4),
-            Europe=(keyword5)) %>%
+  summarise(Université=mean(Université),
+            Collectivite=mean(Collectivite),
+            Hopital=mean(Hopital),
+            Etat=mean(Etat),
+            Europe=mean(Europe),
+            Territoire=mean(Territoire),
+            Administration=mean(Administration)
+                        ) %>%
   pivot_longer(-Year, names_to = "keyword",values_to = "n")
 
 ggplot(foo, aes(x=Year, y=n, group=keyword))+
-  geom_smooth(method="loess", alpha=0.1,span=0.35,aes(color=keyword))+
-  scale_color_manual(values = c("#ca7dcc",
-                                "#fb6a4a",
-                                "orange",
-                                "#67000d", "Firebrick"))+
-  scale_y_continuous(labels=scales::percent)+
+  geom_smooth(method="loess", alpha=0.1,span=0.45,aes(color=keyword))+
+  scale_color_manual(values = col)+
+  scale_y_continuous(labels=scales::percent, limits=c(0, NA))+
   labs(y="densité", x=NULL, title = "Performance")
 
 ggsave("./images/keyword2.jpeg", width = 27, height = 18, units = "cm")
-
-
 ```
 
-## selections de mots par analyse du sentiment
 
-On construit des thèmes lexicaux, on s'aidera ensuite de vectorisation.
+# la performance et sa mesure
 
-```{r 09}
-library(syuzhet)
-my_text <- dn$text
-method <- "custom"
-
-
-#performance", "performances", "contrôle", "résultat", "résultats", record, "
-
-
-custom_lexicon1 <- data.frame(word=c("évaluation", "Evaluation", "évaluations", "Evaluations",
-                                     "performance", "Performance", "performances", "Performances",
-                                     "Efficacité", "Efficience", "efficacité", "efficience",
-                                     "compétitivité","succès", 
-                                     "rendement", "Rendement","rendements", "Rendements",
-                                     "Rentabilité", "rentable"),  
-                              value=c(1,1,1,1,
-                                      1,1,1,1,
-                                      1,1,1,1,
-                                      1,1,
-                                      1,1,1,1,
-                                      1,1
-                                      ))
-
-custom_1 <- get_sentiment(my_text, method = method, lexicon = custom_lexicon1)
-custom_1<-as.data.frame(custom_1)
-
-
-table(custom_1)
-custom_lexicon2 <- data.frame(word=c("territoire","territorial", "Territoire","Territorial","Territoriale","Territoriaux",
-                                     "local", "locale","Local", "Locale",
-                                     "collectivité", "collectivités", "Collectivités", "locale", "locales", 
-                                     "mairie",   "municipal",
-                                     "département","Département", "départements","Départements", "départemental","Départemental",
-                                      "départementale","Départementale", "départementales","Départementales"),
-                             value=c(1,1,1,1,1,1,
-                                     1,1,1,1,
-                                     1,1,1,1,1,
-                                     1,1,
-                                     1,1,1,1,1,1,
-                                     1,1,1,1
-                                     ))
-
-
-custom_2 <- get_sentiment(my_text, method = method, lexicon = custom_lexicon2)
-custom_2<-as.data.frame(custom_2)
-
-foo<-cbind(dn,custom_1,custom_2) %>%
-  select(Year,custom_1, custom_2,n_words)%>% 
-  group_by(Year) %>%
-  summarise(n_words=sum(n_words),
-            n_perf=sum(custom_1)/n_words,
-            n_collect=sum(custom_2)/n_words) %>% select(-n_words)%>%
-  pivot_longer(-Year,names_to="variable", values_to = "value")
-
-ggplot(foo,aes(x=Year,y=value,group=variable))+
-  geom_line(stat="identity", aes(color=variable), linewidth=1)+
-  geom_smooth(aes(color=variable), span=.4)
-
-
-
-
-```
-
-## c'est plus efficace avec des regex et une taxonomie
-
-niveau 1 niveau 2 ....
 
 ```{r 10}
 
-#une autre approche par regex est sans doute meilleure
-
-#par exemple
 
 #performance
 
-dn$t_Performance<-ifelse(str_detect(dn$text,"[P|p]erform.*")==TRUE, 1,0)/dn$n_words
-dn$t_Rentabilité<-ifelse(str_detect(dn$text,"[R|r]entab.*")==TRUE, 1,0)/dn$n_words
-dn$t_Efficacité<-ifelse(str_detect(dn$text,"[E|e]fficac.*")==TRUE, 1,0)/dn$n_words
-#dn$t_Efficience<-ifelse(str_detect(dn$text,"[E|e]effici.*")==TRUE, 1,0)/dn$n_words
-dn$t_Rentabilité<-ifelse(str_detect(dn$text,"[R|r]entab.*")==TRUE, 1,0)/dn$n_words
-dn$t_Evaluation<-ifelse(str_detect(dn$text,"[E|é]valu.*")==TRUE, 1,0)/dn$n_words
+dn$Performance<-str_count(dn$text,"[P|p]erform.*")/dn$n_words
+dn$Rentabilité<-str_count(dn$text,"[R|r]entab.*")/dn$n_words
+dn$Efficacité<-str_count(dn$text,"[E|e]fficac.*")/dn$n_words
+#dn$Efficience<-str_count(dn$text,"[E|e]effici.*")/dn$n_words
+dn$Rentabilité<-str_count(dn$text,"[R|r]entab.*")/dn$n_words
+dn$Evaluation<-str_count(dn$text,"[E|é]valu.*")/dn$n_words
+dn$Controle<-str_count(dn$text,"[C|c]ontrôl.*")/dn$n_words
+
 
 foo<-dn %>%
-  select(Key,Year,t_Performance, t_Rentabilité, t_Efficacité, #t_Efficience, 
-         t_Rentabilité, t_Evaluation)%>% 
+  select(Key,Year,Performance, Rentabilité, Efficacité, #Efficience, 
+         Rentabilité, Evaluation, Controle)%>% 
   pivot_longer(-c(Key, Year), names_to = "variable", values_to = "taux") %>%
   group_by(Year, variable)%>%
   summarise(taux=mean(taux))  %>%
@@ -372,29 +283,16 @@ foo1<-foo %>%
 
 ggplot(foo,aes(x=Year,y=taux,group=variable))+
 #  geom_line(stat="identity", aes(color=variable), linewidth=1)+
-  geom_smooth(aes(color=variable), span=.35, alpha=.1)+
-  scale_y_continuous(labels=scales::percent, limits=c(0, NA))+
+  geom_smooth(aes(color=variable), span=.45, alpha=.1)+
+  scale_y_continuous(labels=scales::percent, limits=c(0,0.0025))+
   labs(y="densité", x=NULL, title = "Performance")+
-    scale_color_manual(values = c("#ca7dcc",
-                                "#fb6a4a",
-                                "orange",
-                                "#67000d", "Firebrick"))
+    scale_color_manual(values = col)
 
 
 ggsave("./images/keyword3.jpeg", width = 27, height = 18, units = "cm")
 
 
 cor(foo1)
-
-#management vs politique
-dn$t_Gestion<-ifelse(str_detect(dn$text,"[G|g]estion.*")==TRUE, 1,0)
-
-#territoire
-dn$t_territoire<-ifelse(str_detect(dn$text,"[T|t]erritoria.*")==TRUE, 1,0)
-
-#état
-
-dn$t_Université<-ifelse(str_detect(dn$text,"[U|u]niversit.*")==TRUE, 1,0)
 
 
 ```

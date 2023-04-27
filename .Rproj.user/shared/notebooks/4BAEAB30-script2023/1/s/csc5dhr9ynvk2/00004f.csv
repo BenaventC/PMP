@@ -1,0 +1,5 @@
+"0","ggplot(dn, aes(x=n_words ,y=nchar/n_words))+"
+"0","  geom_point()+"
+"0","  theme_minimal()+geom_smooth()+xlim(0, 750)+"
+"0","  labs(x=""nombre de mots"","
+"0","       y=""longueur des mots"")"
