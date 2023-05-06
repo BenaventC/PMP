@@ -1,0 +1,1 @@
+"0","ggplot(cos2, aes(x=PolitiquePublique))+geom_histogram(binwidth=.02) +xlim(0, 1)"

@@ -21,19 +21,12 @@ library(quanteda.textstats)
 library(quanteda.textmodels)
 library(scales)
 library(ggwordcloud)
-library(spacyr)
 library(readr) #lire les donnees
-library(stringr) #manipuler le texte
 library(pals)
-library(ape) #pour de jolis dendogrammes
-library(tidytext) #du nlp
-library(proustr) #un package sympa pour les dicos
-library(mixr)
-library(widyr)
-library(igraph) #classic des reseaux
 library(ggrepel) #gestion des labels
-library(ggraph) 
-library(gglorenz) #courbe de concentration
+library(plotly)
+library(doc2vec)
+
 library('extrafont') #c'est pour igraph
 # Import des fontes du système - cela peut être long
 #font_import()
@@ -55,8 +48,13 @@ dn<-PMP %>%
   select(Key,`Publication Year`,Title, `Abstract Note`, Issue, Volume)%>% 
   rename(Year=`Publication Year`, Abstract=`Abstract Note`) %>% 
   mutate(text=paste0(Title,". ", Abstract),
+         text=str_replace_all(text,"[.'.]"," "),
+         text=str_replace_all(text,"[.’.]"," "),
+         text=str_replace_all(text,"-", ""),
+         text=str_replace_all(text,"[*]", ","),
+         text=str_replace_all(text,"[/]", " "),
          nchar=nchar(text),
-         n_words = stringr::str_count(text, ' ')+1,
+         n_words = stringr::str_count(text, ' '),
          decade=as.character(ifelse(Year<2000,(floor((Year-1900)/10)*10)+1900,(floor((Year-2000)/10)*10)+2000)),
          Issue2=ifelse(str_sub(Issue, 1,3)=="Vol",str_sub(Issue, -1),Issue), 
          Issue2=ifelse(Issue2=="1-2",1, ifelse(Issue2=="3-4",3, Issue2)),
@@ -64,43 +62,269 @@ dn<-PMP %>%
          numéro=Year+x) %>%  
   filter(Abstract!="Null") #critere du résume
 
+
 ```
-
-
 
 # word2vec
 
+On utilise un modèle particulier qui est paragraph2vec. Analogie à word to vec il comprend un token suplémentaire qui est le document, vectorisé dans le même espace que celui des mots.
 
-```{r 06}
+Ce qu'on peut en attendre
+
+-   résoudre simultanéement l'embeddings des termes et celui des documents
+-   un apport d'information par l'identification du document. Mais comment çà oeuvre ?
+
+On utilise le package `Word2vec` de bnozacs ( à préciser)
+
+les étapes
+
+### 1 constitution du data set
+
+```{r 06a}
+#library(doc2vec)
+
+
+# On constitue le corpus
+
+corp<-corpus(dn$text, docvars =dn)
+toks <- tokens(corp, remove_punct = TRUE, padding=TRUE )%>%
+  tokens_tolower() %>% 
+ tokens_select(pattern = stopwords('french'), selection = 'remove')
+
+# On calcule les collocations
+
+#collocation
+tstat_col_caps <- 
+  tokens_select(toks, case_insensitive = TRUE,
+                                padding = TRUE) %>% 
+           textstat_collocations(min_count = 4, size=2:5) %>%
+  filter(lambda>3 & z>4)
+
+#integration
+toks_comp <- tokens_compound(toks, pattern = tstat_col_caps) 
+
+
+#statistiques des mots
+
+dfm <-  dfm(toks_comp)
+
+tstat_freq <- as.data.frame(textstat_frequency(dfm))
+
+N<-as.numeric(nrow(tstat_freq)) #nombre de doc
+M=sum(tstat_freq$frequency) #nombre de mot
+
+tstat_freq2<-tstat_freq %>% 
+  mutate(idf=log(N/docfreq),
+         tfidf=(frequency/M)*idf) %>%
+  rename(words=feature)
+
+
 
 ```
 
-Par groupe (decade)
+On a donc un vocabulaire de 15 000 mots et un volume de 101 000 mots environ répartit en 955 textes.
+
+On va reconstruire les textes.
+
+```{r 06b}
+library(tidyr)
+
+text <-data.frame(
+  id = seq_along(toks_comp),
+  text = sapply(toks_comp, paste, collapse = " "),
+  row.names = NULL
+)
+
+#restructuration
+text<- cbind(toks$Key, text) %>%
+  rename(doc_id=1)%>%
+  dplyr::select(-id)
+
+
+model <- paragraph2vec(x = text, 
+                       type = "PV-DBOW", 
+                       dim = 200, 
+                       iter = 1000, 
+                       window=5,
+                       min_count = 15, 
+                       lr = 0.05, 
+                       threads = 4)
+
+predict(model, newdata = c("gestion","management"), which="word2word",type = "nearest", top_n=30)
+
+emb_pred<-predict(model, newdata = c("gestion", "management"), which="words",type = "embedding", top_n=30)
+
+
+x <- setNames(object = c("performance service", "management", NA), 
+              nm = c("a", "b", "c"))
+emb <- predict(model, newdata = x, which="docs", type = "embedding")
+emb
+
+
+```
+
+### On s'intéresse aux termes
+
+donc on va chercher à calculer d'autres statistiques, en particulier le score tfidf des termes (leurs discriminance)
+
+On va ajouter ces informations aux words embeddings pour une présentation synthétique.
+
+le vocabulaire de 3600 est trop gros pour être représenté. On va donc sélectionner les mots les plus discriminant au titre de la métrique du tidf.
+
+Quelque précisions sur la méthode UMAP.
 
 ```{r 07}
+# les mots
 
+emb<-as.data.frame(as.matrix(model,which =  "words",normalize = TRUE,encoding = "UTF-8"))
+
+#une pca pour voir
+library(factoextra)
+library(FactoMineR)
+#res.pca <- PCA(t(emb), graph = FALSE)
+#fviz_eig(res.pca, addlabels = TRUE, ylim = c(0, 50))
+#fviz_pca_var(res.pca, col.var = "black")
+
+
+word_umap <- as.data.frame(umap(emb, n_neighbors = 3,   n_components = 2,
+learning_rate = 0.5, init = "random")) %>%
+  rownames_to_column(var="words")%>%
+  rename(d1=V1, d2=V2) %>% 
+  left_join(tstat_freq2) %>%
+  cbind(emb) %>%
+  filter(frequency>4 & frequency<5000)
+
+
+# Dissimilarity matrix
+d <- as.dist(1-cor(t(word_umap[10:209])))
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "ward.D" )
+
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, hang = -1)
+rect.hclust(hc1, k = 25)
+mytree = cutree(hc1, k=25) # combien de  catégories ?
+
+foo<-cbind(word_umap, mytree)%>% 
+  mutate(mytree=factor(mytree))
+
+set.seed(42)
+
+p<-ggplot(foo, aes(label = words, size = tfidf)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 4) +
+  theme_minimal()+
+  facet_wrap(~mytree)
+
+ggsave("./images/vector00.jpeg", plot=p,width = 27, height = 18, units = "cm")
+
+
+
+p<-ggplot(foo, aes(x=V1,y=V2, group=words))+
+  geom_text(aes(label=words, size=tfidf, color=mytree))
+
+fig <- ggplotly(p)
+
+fig
+
+#+scale_size(range = c(.5, 3))
+
+ggsave("./images/vector01.jpeg", width = 27, height = 18, units = "cm")
+
+library(htmlwidgets)
+saveWidget(fig, "p1.html", selfcontained = F, libdir = "lib")
 
 ```
 
-# text 2vec
-
-## Vectorisation des textes
-
-```{r 08}
-
-```
-
-## Vectorisation des concepts
+### les textes
 
 ```{r 09}
 
+emb_doc<-as.data.frame(as.matrix(model,which =  "doc",normalize = TRUE,encoding = "UTF-8")) 
+
+doc_umap <- as.data.frame(umap(emb_doc, n_neighbors = 25,   
+                               n_components = 2,
+                               learning_rate = 0.5, 
+                               init = "random")) %>%
+  rownames_to_column(var="Key")%>%
+  rename(d1=V1, d2=V2)
+
+doc_umap <- doc_umap %>% left_join(dn[,1:4])
+
+#typologie
+d <- as.dist(1-cor(t(emb_doc)))
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "ward.D" )
+
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, hang = -1)
+rect.hclust(hc1, k = 30)
+mytree = cutree(hc1, k=30) # combien de  catégories ?
+
+
+foo<-cbind(mytree, emb_doc) %>% 
+  rownames_to_column(var="Key") %>%
+  mutate(mytree=factor(mytree)) %>%
+  select(1,2)
+
+doc_umap <- doc_umap %>% left_join(foo)
+
+#graph
+
+p<-ggplot(doc_umap, aes(x=d1, y=d2, color=mytree, label=Title)) +
+  geom_point(size=.5)
+
+
+fig <- ggplotly(p)
+
+fig
+
+
 ```
 
+```{r 10}
+library(lsa)
+foo<-rbind(emb, emb_doc)
+cos<-cosine(t(foo))
+d<-1-as.dist(cos)
 
-# Calcul des similarités entre les text et les concepts
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "ward.D2" )
 
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, hang = -1)
+rect.hclust(hc1, k = 12)
+mytree = cutree(hc1, k=12) # combien de  catégories ?
+
+foo<-cbind(foo, mytree)%>% 
+  mutate(mytree=factor(mytree)) %>% 
+  rownames_to_column(var="words")
+
+set.seed(42)
+
+p<-ggplot(foo, aes(label = words, size = 2)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 4) +
+  theme_minimal()+
+  facet_wrap(~mytree)
+p
+ggsave("./images/vector05.jpeg", plot=p,width = 27, height = 18, units = "cm")
+
+
+```
 
 ```{r 10}
 
+predict(model, newdata = c("gestion","management"), which="word2word",type = "nearest", top_n=30)
+
+emb_pred<-predict(model, newdata = c("gestion", "management"), which="words",type = "embedding", top_n=30)
+
+
+x <- setNames(object = c("performance service", "management", NA), 
+              nm = c("a", "b", "c"))
+emb <- predict(model, newdata = x, which="docs", type = "embedding")
+emb
 
 ```

@@ -1,0 +1,1 @@
+"0","ggplot(cos2, aes(x=Performance))+geom_histogram(binwidth=.02) +xlim(0, 1)"

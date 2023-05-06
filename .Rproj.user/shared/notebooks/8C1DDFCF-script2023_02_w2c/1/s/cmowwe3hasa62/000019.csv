@@ -1,0 +1,5 @@
+"1","
+"
+"0","wv <- predict(model, newdata = c(""gestion"", ""management""), type = ""embedding"")"
+"0","wv <- wv[""gestion"", ] + wv[""management"", ] "
+"0","predict(model, newdata = wv, type = ""nearest"", top_n = 30)"

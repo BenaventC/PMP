@@ -1,0 +1,67 @@
+"0","knitr::opts_chunk$set(echo = TRUE,include=TRUE,cache=TRUE,warning=FALSE,message = FALSE )"
+"0","library(readr) #lire les donnees"
+"0","library(tidyverse) #on ne peut plus s'en passer"
+"0","library(quanteda) # les bases du nlp"
+"0","library(spacyr)"
+"0","devtools::install_github(""quanteda/quanteda.corpora"")"
+"2","Skipping install of 'quanteda.corpora' from a github remote, the SHA1 (ec4b76d8) has not changed since last install.
+  Use `force = TRUE` to force installation
+"
+"0","devtools::install_github(""kbenoit/quanteda.dictionaries"")"
+"2","Skipping install of 'quanteda.dictionaries' from a github remote, the SHA1 (d531a341) has not changed since last install.
+  Use `force = TRUE` to force installation
+"
+"0","library(stringr) #manipuler le texte"
+"0","library(pals)"
+"0","library(ape) #pour de jolis dendogrammes"
+"0","library(tidytext) #du nlp"
+"0","library(proustr) #un package sympa pour les dicos"
+"0","library(mixr)"
+"0","library(widyr)"
+"0","library(reshape2) "
+"2","
+Attachement du package : ‘reshape2’
+
+"
+"2","The following object is masked from ‘package:tidyr’:
+
+    smiths
+
+"
+"0","library(igraph) #classic des reseaux"
+"0","library(ggrepel) #gestion des labels"
+"0","library(ggraph) "
+"0","library(gglorenz) #courbe de concentration"
+"0","library('extrafont') #c'est pour igraph"
+"0","# Import des fontes du système - cela peut être long"
+"0","#font_import()"
+"0","#fonts() # Liste des polices disponibles"
+"0","#loadfonts(device = ""pdf"") # Indiquer device = ""pdf"" pour produire un pdf "
+"0","library(stringi)"
+"0","library(gridExtra)"
+"2","
+Attachement du package : ‘gridExtra’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    combine
+
+"
+"0","library(cleanNLP) "
+"2","Warning: le package ‘cleanNLP’ a été compilé avec la version R 4.0.5"
+"0","library(text2vec)"
+"2","Warning: le package ‘text2vec’ a été compilé avec la version R 4.0.5"
+"2","
+Attachement du package : ‘text2vec’
+
+"
+"2","The following object is masked from ‘package:igraph’:
+
+    normalize
+
+"
+"0","library(wordVectors)"
+"0","library(tsne)"
+"2","Warning: le package ‘tsne’ a été compilé avec la version R 4.0.5"
+"0","library(ape)"

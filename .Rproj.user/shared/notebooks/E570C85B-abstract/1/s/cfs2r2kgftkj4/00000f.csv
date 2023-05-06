@@ -1,0 +1,5 @@
+"0","#library(readr)"
+"0","#on lit les données"
+"0","PMP <- read_csv(""PMPLast.csv"")"
+"2","Error: 'PMPLast.csv' does not exist in current working directory ('C:/Users/33623/Documents/_AtelierR/__bibliographics/PMP').
+"

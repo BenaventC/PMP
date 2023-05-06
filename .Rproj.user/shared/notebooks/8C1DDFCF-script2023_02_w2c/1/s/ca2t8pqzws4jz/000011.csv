@@ -1,0 +1,1 @@
+"0","ggplot(tokens_lemma2, aes(x=tf))+geom_density(kernel = ""gaussian"")+scale_x_log10()+scale_y_log10()"

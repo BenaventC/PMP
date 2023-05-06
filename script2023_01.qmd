@@ -188,25 +188,62 @@ ggsave("./images/keyword0.jpeg", width = 27, height = 18, units = "cm")
 
 ## Comptons les mots ?
 
+
+## Une petite ontologie : 
+
+L'angle d'analyse
+
+* Politique publique
+* science administrative
+* Gestion et Management
+
+Les niveaux de gouvernance
+* Institutions internationale
+* Etat
+* Collectivité locales et communales
+
+Les champs :
+* défense
+* police
+* justice
+* Santé
+* Education
+* recherche
+* protection sociale
+* retraites
+* développement économique
+* 
+
+Les problèmes :
+* modernisation
+* réforme
+* efficacité/ performance
+* adaptation
+
+
 ### politique et management
 
 ```{r 08}
 
-dn$keyword1<-str_count(dn$text, pattern = "[P|p]olitique.*\\s[P|p]ublique.*")/dn$n_words
-dn$keyword2<-str_count(dn$text, pattern = "[G|g]estion")/dn$n_words
-dn$keyword3<-str_count(dn$text, pattern = "[M|m]anagement")/dn$n_words
+dn$PolitiquePublique<-str_count(dn$text, pattern = "[P|p]olitique.*\\s[P|p]ublique.*")/dn$n_words
+dn$Gestion<-str_count(dn$text, pattern = "[G|g]estion")/dn$n_words
+dn$Management<-str_count(dn$text, pattern = "[M|m]anagement")/dn$n_words
+dn$ServicePublic<-str_count(dn$text, pattern = "[S|s]ervice.*[:blank:][P|p]ubli.*")/dn$n_words
 
 foo<-dn %>% 
   group_by(Year)%>% 
-  summarise(PolitiquePublique=mean(keyword1),
-            Gestion=mean(keyword2),
-            Management=mean(keyword3)) %>%
+  summarise(PolitiquePublique=mean(PolitiquePublique),
+            Gestion=mean(Gestion),
+            Management=mean(Management),
+            ServicePublic=mean(ServicePublic),
+
+            ) %>%
   pivot_longer(-Year, names_to = "keyword",values_to = "n")
 
 ggplot(foo, aes(x=Year, y=n, group=keyword))+
   geom_smooth(method="loess", alpha=0.1,span=0.5,aes(color=keyword))+
   scale_color_manual(values = col)+
-  scale_y_continuous(labels=scales::percent)+
+  scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
   labs(y="densité", 
        x=NULL, 
        title = "Fréquence des termes",
@@ -217,17 +254,18 @@ ggsave("./images/keyword1.jpeg", width = 27, height = 18, units = "cm")
 
 ```
 
-### Institution
+### Institutions
 
 ```{r 09}
 
 dn$Collectivite<-str_count(dn$text, pattern = "[C|c]ollectivit.*")/dn$n_words
 dn$Hopital<-str_count(dn$text, pattern = "[H|h][ô|o][.|s]pital.*")/dn$n_words
-dn$Etat<-str_count(dn$text, pattern = "Etat")/dn$n_words
+dn$Etat<-str_count(dn$text, pattern = "[E|é]tat")/dn$n_words
 dn$Europe<-str_count(dn$text, pattern = "[E|e]urop.*")/dn$n_words
 dn$Université<-str_count(dn$text,"[U|u]niversit.*")/dn$n_words
 dn$Territoire<-str_count(dn$text,"[T|t]errit[o, oi]r.*")/dn$n_words
 dn$Administration<-str_count(dn$text,"[A|a]dministrat.*")/dn$n_words
+dn$Commune<-str_count(dn$text,".*[C|c]ommun.*")/dn$n_words
 
 foo<-dn %>% 
   group_by(Year)%>% 
@@ -237,7 +275,8 @@ foo<-dn %>%
             Etat=mean(Etat),
             Europe=mean(Europe),
             Territoire=mean(Territoire),
-            Administration=mean(Administration)
+            Administration=mean(Administration),
+            Commune=mean(Commune)
                         ) %>%
   pivot_longer(-Year, names_to = "keyword",values_to = "n")
 
@@ -245,7 +284,7 @@ ggplot(foo, aes(x=Year, y=n, group=keyword))+
   geom_smooth(method="loess", alpha=0.1,span=0.45,aes(color=keyword))+
   scale_color_manual(values = col)+
   scale_y_continuous(labels=scales::percent, limits=c(0, NA))+
-  labs(y="densité", x=NULL, title = "Performance")
+  labs(y="densité", x=NULL, title = "Institution")
 
 ggsave("./images/keyword2.jpeg", width = 27, height = 18, units = "cm")
 ```
@@ -264,11 +303,13 @@ dn$Efficacité<-str_count(dn$text,"[E|e]fficac.*")/dn$n_words
 dn$Rentabilité<-str_count(dn$text,"[R|r]entab.*")/dn$n_words
 dn$Evaluation<-str_count(dn$text,"[E|é]valu.*")/dn$n_words
 dn$Controle<-str_count(dn$text,"[C|c]ontrôl.*")/dn$n_words
+dn$Reforme<-str_count(dn$text,"[R|r]éform.*")/dn$n_words
+dn$Modernisation<-str_count(dn$text,"[M|m]odern.*")/dn$n_words
 
 
 foo<-dn %>%
   select(Key,Year,Performance, Rentabilité, Efficacité, #Efficience, 
-         Rentabilité, Evaluation, Controle)%>% 
+         Rentabilité, Evaluation, Controle, Reforme, Modernisation )%>% 
   pivot_longer(-c(Key, Year), names_to = "variable", values_to = "taux") %>%
   group_by(Year, variable)%>%
   summarise(taux=mean(taux))  %>%
@@ -289,8 +330,59 @@ ggplot(foo,aes(x=Year,y=taux,group=variable))+
 
 ggsave("./images/keyword3.jpeg", width = 27, height = 18, units = "cm")
 
+```
 
-cor(foo1)
+## corrélations entre les keywords
+
+```{r 10}
+
+foo<-dn %>%
+  select(Key,Year,Performance, Rentabilité, Efficacité, #Efficience, 
+         Rentabilité, Evaluation, Controle, Commune, ServicePublic,
+         Collectivite, Etat, Université, Europe, Territoire,Administration,
+         Management, PolitiquePublique, Management, Modernisation, Reforme)%>% 
+  pivot_longer(-c(Key, Year), names_to = "variable", values_to = "taux") %>%
+  group_by(Year, variable)%>%
+  summarise(taux=mean(taux)) %>%
+  group_by(variable)%>%  
+  mutate(delta = c(0,diff(taux))) %>% 
+  select(-taux)%>%
+  ungroup()%>% 
+  pivot_wider(Year, names_from = "variable", values_from = "delta") %>% 
+  select(-Year)
+r
+
+r <-cor(foo) 
+
+library(ggcorrplot)
+
+ggcorrplot(r, hc.order = TRUE, type = "lower",
+   outline.col = "white",
+   colors = c("#6D9EC1", "white", "#E46726"), lab=TRUE, lab_size=2)
+
+ggsave("./images/keyword_cor.jpeg", width = 27, height = 18, units = "cm")
+
+library("FactoMineR")
+res.pca <- PCA(r, ncp=6,graph = FALSE)
+
+library("factoextra")
+eig.val <- get_eigenvalue(res.pca)
+eig.val
+fviz_pca_var(res.pca, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Évite le chevauchement de texte
+             )
+fviz_pca_var(res.pca, axes= c(3,4),col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Évite le chevauchement de texte
+             )
+
+library(psych)
+mle <- fa(r,6,rotate="oblimin",fm="uls")
+mle
+summary(mle)
+
+fa.sort(mle,polar=FALSE)
 
 
 ```
