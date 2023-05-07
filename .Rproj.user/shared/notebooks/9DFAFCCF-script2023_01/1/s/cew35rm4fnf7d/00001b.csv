@@ -1,0 +1,31 @@
+"0",""
+"0","library(psych)"
+"2","Warning: le package ‘psych’ a été compilé avec la version R 4.0.5"
+"2","
+Attachement du package : ‘psych’
+
+"
+"2","The following objects are masked from ‘package:scales’:
+
+    alpha, rescale
+
+"
+"2","The following objects are masked from ‘package:ggplot2’:
+
+    %+%, alpha
+
+"
+"0","mle <- fa(r,6,rotate=""oblimin"",fm=""uls"")"
+"2","Loading required namespace: GPArotation
+"
+"2","Warning: The estimated weights for the factor scores are probably incorrect.  Try a different factor score estimation method."
+"0","mle"
+"1","Factor Analysis using method = "
+"1"," "
+"1","uls"
+"1","
+Call: "
+"1","fa(r = r, nfactors = 6, rotate = ""oblimin"", fm = ""uls"")
+"
+"1","Standardized loadings (pattern matrix) based upon correlation matrix
+"

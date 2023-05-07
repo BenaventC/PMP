@@ -188,38 +188,19 @@ ggsave("./images/keyword0.jpeg", width = 27, height = 18, units = "cm")
 
 ## Comptons les mots ?
 
-
-## Une petite ontologie : 
+## Une petite ontologie :
 
 L'angle d'analyse
 
-* Politique publique
-* science administrative
-* Gestion et Management
+-   Politique publique
+-   science administrative
+-   Gestion et Management
 
-Les niveaux de gouvernance
-* Institutions internationale
-* Etat
-* Collectivité locales et communales
+Les niveaux de gouvernance \* Institutions internationale \* Etat \* Collectivité locales et communales
 
-Les champs :
-* défense
-* police
-* justice
-* Santé
-* Education
-* recherche
-* protection sociale
-* retraites
-* développement économique
-* 
+Les champs : \* défense \* police \* justice \* Santé \* Education \* recherche \* protection sociale \* retraites \* développement économique \*
 
-Les problèmes :
-* modernisation
-* réforme
-* efficacité/ performance
-* adaptation
-
+Les problèmes : \* modernisation \* réforme \* efficacité/ performance \* adaptation
 
 ### politique et management
 
@@ -334,7 +315,7 @@ ggsave("./images/keyword3.jpeg", width = 27, height = 18, units = "cm")
 
 ## corrélations entre les keywords
 
-```{r 10}
+```{r 11}
 
 foo<-dn %>%
   select(Key,Year,Performance, Rentabilité, Efficacité, #Efficience, 
@@ -350,7 +331,7 @@ foo<-dn %>%
   ungroup()%>% 
   pivot_wider(Year, names_from = "variable", values_from = "delta") %>% 
   select(-Year)
-r
+
 
 r <-cor(foo) 
 

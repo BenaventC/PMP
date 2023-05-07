@@ -5,139 +5,18 @@
 "0","library(scales)"
 "0","library(ggwordcloud)"
 "0","library(spacyr)"
-"2","Warning: le package ‘spacyr’ a été compilé avec la version R 4.0.2"
 "0","library(readr) #lire les donnees"
 "0","library(stringr) #manipuler le texte"
 "0","library(pals)"
 "0","library(ape) #pour de jolis dendogrammes"
-"2","Warning: le package ‘ape’ a été compilé avec la version R 4.0.5"
-"2","
-Attachement du package : ‘ape’
-
-"
-"2","The following object is masked from ‘package:dplyr’:
-
-    where
-
-"
 "0","library(tidytext) #du nlp"
-"2","Warning: le package ‘tidytext’ a été compilé avec la version R 4.0.5"
 "0","library(proustr) #un package sympa pour les dicos"
-"2","
-Attachement du package : ‘proustr’
-
-"
-"2","The following object is masked from ‘package:tidytext’:
-
-    stop_words
-
-"
 "0","library(mixr)"
-"2","Le chargement a nécessité le package : janeaustenr
-"
-"2","Le chargement a nécessité le package : tm
-"
-"2","Warning: le package ‘tm’ a été compilé avec la version R 4.0.5"
-"2","Le chargement a nécessité le package : NLP
-"
-"2","Warning: le package ‘NLP’ a été compilé avec la version R 4.0.3"
-"2","
-Attachement du package : ‘NLP’
-
-"
-"2","The following object is masked from ‘package:ggplot2’:
-
-    annotate
-
-"
-"2","The following objects are masked from ‘package:quanteda’:
-
-    meta, meta<-
-
-"
-"2","
-Attachement du package : ‘tm’
-
-"
-"2","The following object is masked from ‘package:quanteda’:
-
-    stopwords
-
-"
-"2","Le chargement a nécessité le package : textometry
-"
-"2","Le chargement a nécessité le package : ggmap
-"
-"2","Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
-"
-"2","Please cite ggmap if you use it! See citation(""ggmap"") for details.
-"
-"2","
-Attachement du package : ‘ggmap’
-
-"
-"2","The following object is masked from ‘package:plotly’:
-
-    wind
-
-"
 "0","library(widyr)"
 "0","library(igraph) #classic des reseaux"
-"2","Warning: le package ‘igraph’ a été compilé avec la version R 4.0.5"
-"2","
-Attachement du package : ‘igraph’
-
-"
-"2","The following objects are masked from ‘package:ape’:
-
-    degree, edges, mst, ring
-
-"
-"2","The following object is masked from ‘package:plotly’:
-
-    groups
-
-"
-"2","The following objects are masked from ‘package:lubridate’:
-
-    %--%, union
-
-"
-"2","The following objects are masked from ‘package:dplyr’:
-
-    as_data_frame, groups, union
-
-"
-"2","The following objects are masked from ‘package:purrr’:
-
-    compose, simplify
-
-"
-"2","The following object is masked from ‘package:tidyr’:
-
-    crossing
-
-"
-"2","The following object is masked from ‘package:tibble’:
-
-    as_data_frame
-
-"
-"2","The following objects are masked from ‘package:stats’:
-
-    decompose, spectrum
-
-"
-"2","The following object is masked from ‘package:base’:
-
-    union
-
-"
 "0","library(ggrepel) #gestion des labels"
 "0","library(ggraph) "
-"2","Warning: le package ‘ggraph’ a été compilé avec la version R 4.0.5"
 "0","library(gglorenz) #courbe de concentration"
-"2","Warning: le package ‘gglorenz’ a été compilé avec la version R 4.0.2"
 "0","library('extrafont') #c'est pour igraph"
 "0","# Import des fontes du système - cela peut être long"
 "0","#font_import()"
