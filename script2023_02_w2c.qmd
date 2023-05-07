@@ -322,7 +322,7 @@ fig
 
 ## tester des concepts
 
-Un concept est formé d'une phrase composée des mots clés qui s'y rapportent, on les élabore progressivement par ajustements succéssif en les empruntant dans le dictionnaire. 
+Un concept est formé d'une phrase composée des mots clés qui s'y rapportent, on les élabore progressivement par ajustements successif en les empruntant dans le dictionnaire. 
 
 
 ```{r 010}
