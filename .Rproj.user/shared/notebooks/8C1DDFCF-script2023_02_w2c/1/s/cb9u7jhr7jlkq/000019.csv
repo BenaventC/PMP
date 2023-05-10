@@ -1,0 +1,8 @@
+"0",""
+"0","#"
+"0",""
+"0",""
+"0","library(htmlwidgets)"
+"2","Warning: le package ‘htmlwidgets’ a été compilé avec la version R 4.0.5"
+"0","saveWidget(fig, ""p1.html"", selfcontained = F, libdir = ""lib"")"
+"0",""

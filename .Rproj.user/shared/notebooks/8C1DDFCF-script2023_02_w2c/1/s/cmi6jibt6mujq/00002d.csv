@@ -1,0 +1,8 @@
+"0",""
+"0","foo<- cos2 %>%group_by(Year)%>%summarise(Gestion = mean(Gestion, na.rm=TRUE))"
+"0",""
+"0","ggplot(cos2, aes(x=Year, y=Gestion, group=1))+"
+"0","  geom_smooth(method=""loess"", alpha=0.1,span=0.45)+"
+"0","  scale_color_manual(values = col)+"
+"0","  scale_y_continuous(labels=scales::percent, limits=c(NA, NA))+"
+"0","  labs(y=""similarité"", x=NULL, title = ""Gestion"")"
