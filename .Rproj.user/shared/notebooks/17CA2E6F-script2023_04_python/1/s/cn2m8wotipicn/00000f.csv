@@ -1,0 +1,5 @@
+"0","classifier(sequence, candidate_labels, hypothesis_template=hypothesis_template)     
+"
+"2","NameError: name 'classifier' is not defined
+"
+"0",""

@@ -1,0 +1,20 @@
+"0","flowchart TD  
+Catégories[Catégories] --> Concept[Concepts]
+subgraph 2
+    Catégories[Catégories] --> éléments1[Eléments du \nmanagement]
+    Catégories[Catégories] --> éléments2[Institutions]
+    Catégories[Catégories] --> éléments3[Performances]
+    Catégories[Catégories] --> éléments4[Politiques Publiques]
+end
+subgraph 1
+  Concept[Concept] --> Termes1[Termes]
+end
+ Termes1[Termes] --> subs[Substantifs ...]
+subgraph 0
+
+ Termes1[Termes] --> Regex[Regex]
+ subs[Substantifs ...]--> Regex[Regex]
+end"
+"2","'mermaid' n'est pas reconnu en tant que commande interne
+ou externe, un programme ex�cutable ou un fichier de commandes.
+"

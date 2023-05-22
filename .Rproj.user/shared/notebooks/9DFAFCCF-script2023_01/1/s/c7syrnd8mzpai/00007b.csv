@@ -1,0 +1,16 @@
+"0","ggplot(TSNE,aes(x=V1, y=V2,label=V3))+
+  geom_text_repel(aes(label=keyword,size=Densité), max.overlaps=100)+
+  theme(legend.position=""none"")+
+  labs(title=""Fréquence de citation des termes clés"",
+       subtitle="" Les éléments du management public"",
+       x=NULL, y=NULL,
+       caption = ""Modèle Tsne - perplexité=5\nsur D=1-r"")
+ggplot(TSNE,aes(x=V1, y=V2,label=V3))+
+  geom_text_repel(aes(label=keyword,size=Densité), max.overlaps=100)+
+  theme(legend.position=""none"")+
+  labs(title=""Fréquence de citation des termes clés"",
+       subtitle="" Les éléments du management public"",
+       x=NULL, y=NULL,
+       caption = ""Modèle Tsne - perplexité=5\nsur D=1-r"")
+"
+"0","ggsave(""./images/keyword50.jpeg"", width = 27, height = 18, units = ""cm"")"

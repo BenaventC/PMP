@@ -1,0 +1,221 @@
+---
+title: "PMP 40ans - un essai avec CamemBert"
+author: "CB MB SB"
+format: html
+subtitle: "Vectoriser le corpus" 
+title-block-banner: img01.jpeg
+date: today
+execute : 
+  message: false
+  warning: false
+code-fold: true
+editor: visual
+---
+
+## Les outils
+
+```{r 01}
+library(tidyverse) #on ne peut plus s'en passer
+library(quanteda) # les bases du nlp
+library(quanteda.textstats)
+library(quanteda.textmodels)
+library(scales)
+library(ggwordcloud)
+library(readr) #lire les donnees
+library(pals)
+library(ggrepel) #gestion des labels
+library(plotly)
+library(doc2vec)
+library(tidyr)
+library(word2vec)
+library(uwot)
+library(lsa)
+library(Rtsne)
+
+
+
+library('extrafont') #c'est pour igraph
+# Import des fontes du système - cela peut être long
+#font_import()
+#fonts() # Liste des polices disponibles
+#loadfonts(device = "pdf") # Indiquer device = "pdf" pour produire un pdf 
+
+theme_set(theme_minimal())
+
+col<- c("#ca7dcc","#fb6a4a","orange","#67000d", "firebrick", "pink", "ivory3","skyblue")
+
+```
+
+# Les data
+
+```{r 02}
+PMP <- read_csv("./data/PMPLast.csv")
+
+dn<-PMP %>% 
+  select(Key,`Publication Year`,Title, `Abstract Note`, Issue, Volume)%>% 
+  rename(Year=`Publication Year`, Abstract=`Abstract Note`) %>% 
+  mutate(text=paste0(Title,". ", Abstract),
+         text=str_replace_all(text,"[.'.]"," "),
+         text=str_replace_all(text,"[.’.]"," "),
+         text=str_replace_all(text,"-", ""),
+         text=str_replace_all(text,"[*]", ","),
+         text=str_replace_all(text,"[/]", " "),
+         nchar=nchar(text),
+         n_words = stringr::str_count(text, ' '),
+         decade=as.character(ifelse(Year<2000,(floor((Year-1900)/10)*10)+1900,(floor((Year-2000)/10)*10)+2000)),
+         Issue2=ifelse(str_sub(Issue, 1,3)=="Vol",str_sub(Issue, -1),Issue), 
+         Issue2=ifelse(Issue2=="1-2",1, ifelse(Issue2=="3-4",3, Issue2)),
+         x=as.numeric(Issue2)/4,
+         numéro=Year+x) %>%  
+  filter(Abstract!="Null") #critere du résume
+
+
+```
+
+## Une approche par embeddings : Camenbert
+
+corpus trop petit et prendre en compte tout le vocabulaires : près de 9500 tokens différents, et 1900 tokens retenus dans les analyses classiques même s'ils représente 80% du corpus ( vérifier par calcul)
+
+Les modèles pré-entrainés présentent des avantages
+
+-   Ils permettent de prendre en compte un empa plus larges : les mots peu fréquents qui ne peuvent trouver d'embeddings convenables de manière internes, peuvent être intégré car on peut intégré un embeddings calculés sur un ensemble bien plus laarge. la limite d'est que dans le contexte du corpus, l'embeddings pré-entrainé ne correspond pas tout à fait au sens local. Prenons l'exemple du mot convention (c'est pas le meilleur)
+
+-   Ils permettent, c'est une hypothèse, de traiter le texte entrant avec le moins de transformation et de réèencodage. Un #llm couvre en principe tout les mots, et possèdent des tokens qui puissent saisir les éléments des mots : les syllabes, différentes formes d'affixes, et donc de saisir les mots qui n'appartiennet pas à son vocabulaire.
+
+On reprend la même idée
+
+a)  vectoriser les mots / tokens
+b)  vectoriser les documents
+c)  vectoriser ses concepts
+d)  corréler textes, token et concepts
+
+Pour la mise en oeuvre on utilise le package [`text`](https://r-text.org/) crée par xxx pour des applications en psychologie du bien-être et de la santé. Il est très utile, permettant une passerelle rapide vers des modèles de type Transformer.
+
+Le modèle utilisé est Camenbert, a tasty model .
+
+On va donc tester le texte brut, sans rien filtrer.
+
+On va choisir les couches supérieures. Dans un W2v il n'y a qu'une seule couche dense, celle qui fait passer des prédicteur à la prédiction, dans un bert il y a douze couches, et entre elle autant de couche d'attentions. C'est un vrai mille feuilles.
+
+Les couches d'atttention permettent de saisir les relations entre les mots dans une même séquences,
+
+les couches denses engramme des motifs différents, les plus basse la syntaxes, des régularité de règles, les plus hautes, la sémantiques, des régularités de sens.
+
+## Executons
+
+La stratégie est de s'appuyer sur une annotation intégrale des textes.
+
+`Udpipe`
+
+```{r 03}
+# Transform the text data to BERT word embeddings
+
+# Example text
+texts <- dn$text  %>% sample(50)
+
+# Defaults
+
+t1<-Sys.time()
+embeddings <- textEmbed(texts,model="camembert-base")
+t2<-Sys.time()
+t<-t2-t1
+t
+
+emb_words<-embeddings$singlewords_we
+saveRDS(emb_words, "./data/emb_words.rds")
+emb_doc<-embeddings$x
+saveRDS(emb_doc, "./data/emb_doc.rds")
+
+#files
+foo<- emb_words %>% filter(n>10) %>% 
+  select(-n) %>%
+  column_to_rownames(var = "words" )
+
+#distance entre les mots
+cos<-cosine(t(foo))
+dist<-1-cos
+
+
+#tsne
+tsne<-Rtsne(dist,dims = 2,
+initial_dims = 50,
+perplexity = 30,
+theta = 0.5,
+check_duplicates = TRUE,
+pca = TRUE,
+partial_pca = FALSE,
+max_iter = 1000,
+is_distance = TRUE)
+
+#viz
+dim<-tsne$Y %>%as.data.frame() %>%
+  rename(D1 =1, D2=2)
+word<-rownames(foo)
+
+dim<-cbind(word, dim)
+
+ggplot(dim, aes(x=D1, y=D2))+
+  geom_text(aes(label=word),size=1.5, position=position_jitter(width=1,height=1))
+
+ggsave("./images/bert_word.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+\%
+
+les comparaisons
+
+```{r 03}
+
+
+```
+
+## représenter les vecteurs mots
+
+malheureusement ça marche pas
+
+```{r 10}
+library(text)
+
+texts <- dn$text  %>% sample(5)
+
+textZeroShot(
+  texts,
+  candidate_labels=c("modernisation", "performance"),
+  hypothesis_template = "This example is {}.",
+  multi_label = TRUE,
+  model = "camembert-base",
+  device = "cpu",
+  tokenizer_parallelism = FALSE,
+  logging_level = "error",
+  return_incorrect_results = FALSE,
+  set_seed = 202208L
+)
+
+ZeroShot_example <- textZeroShot(sequences = c("I play football",
+"The forest is wonderful"),
+candidate_labels = c("sport", "nature", "research"),
+model = "facebook/bart-large-mnli") 
+
+```
+
+## représenter les vecteurs textes
+
+## représenter des concepts
+
+https://www.section.io/engineering-education/how-to-implement-zero-shot-classification-using-python/
+
+```{python}
+!pip install transformers
+from transformers import pipeline
+
+classifier_pipeline = pipeline ("zero-shot-classification", model = "BaptisteDoyen/camembert-base-xnli")
+
+
+input_sequence = "Je vagabonde dans les nuages"
+label_candidate = ['voyager', 'voler']
+
+hypothesis_template = "Ce texte parle de {}."    
+classifier(sequence, candidate_labels, hypothesis_template=hypothesis_template)     
+
+```

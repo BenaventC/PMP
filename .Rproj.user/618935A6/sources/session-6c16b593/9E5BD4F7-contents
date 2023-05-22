@@ -1,0 +1,283 @@
+---
+title: "PMP 40ans - un essai avec CamemBert"
+author: "CB MB SB"
+format: html
+subtitle: "Vectoriser le corpus" 
+title-block-banner: img01.jpeg
+date: today
+execute : 
+  message: false
+  warning: false
+code-fold: true
+editor: visual
+---
+
+## Les outils
+
+```{r 01}
+library(tidyverse) #on ne peut plus s'en passer
+library(quanteda) # les bases du nlp
+library(quanteda.textstats)
+library(quanteda.textmodels)
+library(scales)
+library(ggwordcloud)
+library(readr) #lire les donnees
+library(pals)
+library(ggrepel) #gestion des labels
+library(plotly)
+library(doc2vec)
+library(tidyr)
+library(word2vec)
+library(uwot)
+library(lsa)
+library(Rtsne)
+library(text)
+
+
+library('extrafont') #c'est pour igraph
+# Import des fontes du système - cela peut être long
+#font_import()
+#fonts() # Liste des polices disponibles
+#loadfonts(device = "pdf") # Indiquer device = "pdf" pour produire un pdf 
+
+theme_set(theme_minimal())
+
+col<- c("#ca7dcc","#fb6a4a","orange","#67000d", "firebrick", "pink", "ivory3","skyblue")
+
+```
+
+# Les data
+
+```{r 02}
+PMP <- read_csv("data/PMPLast3.csv", 
+    locale = locale(encoding = "WINDOWS-1252"))
+dn<-PMP %>% 
+  select(Key,`Publication Year`,Title, `Abstract Note`, Issue, Volume)%>% 
+  rename(Year=`Publication Year`, Abstract=`Abstract Note`) %>% 
+  mutate(text=paste0(Title,". ", Abstract),
+         nchar=nchar(text),
+         n_words = stringr::str_count(text, ' ')+1,
+         decade=as.character(ifelse(Year<2000,(floor((Year-1900)/10)*10)+1900,(floor((Year-2000)/10)*10)+2000)),
+         Issue2=ifelse(str_sub(Issue, 1,3)=="Vol",str_sub(Issue, -1),Issue), 
+         Issue2=ifelse(Issue2=="1-2",1, ifelse(Issue2=="3-4",3, Issue2)),
+         x=as.numeric(Issue2)/4,
+         numéro=Year+x)
+
+dn<- dn%>%filter(n_words>100 & n_words<750)
+
+```
+
+## Une approche par embeddings : Camenbert
+
+corpus trop petit et prendre en compte tout le vocabulaires : près de 9500 tokens différents, et 1900 tokens retenus dans les analyses classiques même s'ils représente 80% du corpus ( vérifier par calcul)
+
+Les modèles pré-entrainés présentent des avantages
+
+-   Ils permettent de prendre en compte un empa plus larges : les mots peu fréquents qui ne peuvent trouver d'embeddings convenables de manière internes, peuvent être intégré car on peut intégré un embeddings calculés sur un ensemble bien plus laarge. la limite d'est que dans le contexte du corpus, l'embeddings pré-entrainé ne correspond pas tout à fait au sens local. Prenons l'exemple du mot convention (c'est pas le meilleur)
+
+-   Ils permettent, c'est une hypothèse, de traiter le texte entrant avec le moins de transformation et de réèencodage. Un #llm couvre en principe tout les mots, et possèdent des tokens qui puissent saisir les éléments des mots : les syllabes, différentes formes d'affixes, et donc de saisir les mots qui n'appartiennet pas à son vocabulaire.
+
+On reprend la même idée
+
+a)  vectoriser les mots / tokens
+b)  vectoriser les documents
+c)  vectoriser ses concepts
+d)  corréler textes, token et concepts
+
+Pour la mise en oeuvre on utilise le package [`text`](https://r-text.org/) crée par xxx pour des applications en psychologie du bien-être et de la santé. Il est très utile, permettant une passerelle rapide vers des modèles de type Transformer.
+
+Le modèle utilisé est Camenbert, a tasty model .
+
+On va donc tester le texte brut, sans rien filtrer.
+
+On va choisir les couches supérieures. Dans un W2v il n'y a qu'une seule couche dense, celle qui fait passer des prédicteurs à la prédiction, dans un Bert il y a douze couches, et entre elle autant de couche d'attentions. C'est un vrai mille-feuilles. Les couches d'attention permettent de saisir les relations entre les mots dans une même séquences. les couches denses engramme des motifs différents, les plus basse la syntaxes, des régularité de règles, les plus hautes, la sémantiques, des régularités de sens.
+
+Notre choix principal est d'opter sur une stratégie intégrales ( un texte = un vecteur) ou fractionnée par phrase. ( une phrase = une idée , un vecteur).
+
+la seconde semble à première vue une meilleure approche car elle individualise les idées. On choissira une stratégie du max dans ce cas  au moment d'aggréger, la similarité d'un thème au texte sera la plus grande parmi les phrases. 
+
+## Exécutons
+
+La stratégie est de s'appuyer sur une annotation intégrale des textes. Ils ont été nettoyé par l'emploi semi-automatique d'un correcteur orthographique et grammatical, `hunspell`. Trois passages ont été effectués. 8 heures de travail humain. 
+
+Les principales corrections portent
+
+* sur l'hyphénation 
+* sur les erreur d'OCR
+* sur les néologismes (trop nombreux)
+* sur l'usage de la ponctuation 'incertain
+* sur les erreurs d'accents et de majuscules ( très fréquents)
+* sur peu de fautes de syntaxe
+* peu de fautes d'orthographe
+
+
+```{r 03}
+# Transform the text data to BERT word embeddings
+
+# Example text
+texts <- dn$text  # %>% sample(50)
+
+# Defaults
+
+t1<-Sys.time()
+embeddings <- textEmbed(texts,model="camembert-base")
+t2<-Sys.time()
+t<-t2-t1
+t
+
+emb_words<-embeddings$singlewords_we
+saveRDS(emb_words, "./data/emb_words.rds")
+emb_doc<-embeddings$x
+saveRDS(emb_doc, "./data/emb_doc.rds")
+
+#files
+foo<- emb_words %>% filter(n>10) %>% 
+  select(-n) %>%
+  column_to_rownames(var = "words" )
+
+#distance entre les mots
+cos<-cosine(t(foo))
+dist<-1-cos
+
+
+#tsne
+tsne<-Rtsne(dist,dims = 2,
+initial_dims = 50,
+perplexity = 30,
+theta = 0.5,
+check_duplicates = TRUE,
+pca = TRUE,
+partial_pca = FALSE,
+max_iter = 1000,
+is_distance = TRUE)
+
+#viz
+dim<-tsne$Y %>%as.data.frame() %>%
+  rename(D1 =1, D2=2)
+word<-rownames(foo)
+
+dim<-cbind(word, dim)
+
+ggplot(dim, aes(x=D1, y=D2))+
+  geom_text(aes(label=word),size=1.5, position=position_jitter(width=1,height=1))
+
+ggsave("./images/bert_word.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+## Représenter les vecteurs mots
+
+```{r 03}
+
+#construction du vecteur mot
+
+word<-readRDS("./data/emb_words.rds")
+
+foo<-word %>%
+  filter(str_detect(words,"perform.*")==TRUE )
+
+foo1<-foo %>%
+  column_to_rownames(var="words")
+
+r<-cor(t(foo1[,2:1537]))
+
+library(ggcorrplot)
+ggcorrplot(
+  r,
+  hc.order = TRUE,
+  type = "lower",
+  outline.color = "white",
+  ggtheme = ggplot2::theme_gray,
+  colors = c("#6D9EC1", "white", "#E46726"),
+  lab=TRUE, lab_size = 3
+)
+
+test2<-foo[,3:1538] %>%   
+  summarise_all(mean)
+
+test1<-foo %>% 
+  summarise(words=last(words),
+            n=sum(n))
+test_a<-cbind(test1,test2)
+```
+
+# vecteur mots
+
+```{r 03}
+
+#construction du vecteur concept
+
+word<-readRDS("./data/emb_words.rds")
+
+foo<-word%>% 
+  filter(str_detect(words,"collec.*")==TRUE |
+           str_detect(words,"commun.*")==TRUE)
+library(flextable)
+
+foo1<-foo %>%
+  column_to_rownames(var="words")
+
+foo2<- foo1 %>% 
+  rownames_to_column(var="words") %>%select(words, n)
+
+flextable(foo2)
+
+r<-cor(t(foo1[,2:1537]))
+library(ggcorrplot)
+ggcorrplot(
+  r,
+  hc.order = TRUE,
+  type = "lower",
+  outline.color = "white",
+  ggtheme = ggplot2::theme_gray,
+  colors = c("#6D9EC1", "white", "#E46726"),
+  lab=TRUE, lab_size = 3)
+
+
+test2<-foo[,3:1538] %>%   
+  summarise_all(mean)
+
+test1<-foo %>% 
+  summarise(words=last(words),
+            n=sum(n))
+test_b<-cbind(test1,test2)
+
+foo<-rbind(test_a,test_b)%>%select(-n,-words)%>%t()%>%as.data.frame()
+r<-cor(foo$V1,foo$V2)
+r
+```
+
+## représenter les vecteurs mots
+
+```{r 05}
+doc<-readRDS("./data/emb_doc.rds")
+
+library(lsa)
+
+test<-test_a[3:1538]
+foo<-rbind(test,doc)%>%
+  as.matrix()
+co<-cosine(t(foo))
+co<-co[-1,1]
+
+foo<-cbind(dn, co) %>%filter(Performance!=0)
+
+ggplot(foo, aes(x=co, y=Performance))+
+  geom_smooth(method="lm")+geom_point()
+
+
+foo1<-foo %>%group_by(Year)%>%
+  summarise(co=mean(co), perf=mean(Performance, na.rm=TRUE))
+ggplot(foo1, aes(x=co, y=perf))+geom_smooth(method="lm")+geom_point()
+r<-cor(foo1$co,foo1$perf)
+r
+
+foo1<-foo1 %>%
+  pivot_longer(-Year, names_to = "variable", values_to="value")
+
+ggplot(foo1, aes(x=Year, y=value, group=variable))+geom_line()+geom_smooth(span=.3)+
+  facet_wrap(~variable, scales = "free", ncol=1)
+
+```
+
+

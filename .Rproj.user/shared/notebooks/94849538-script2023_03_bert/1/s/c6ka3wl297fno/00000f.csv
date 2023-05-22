@@ -1,0 +1,111 @@
+"0","library(tidyverse) #on ne peut plus s'en passer"
+"0","library(quanteda) # les bases du nlp"
+"0","library(quanteda.textstats)"
+"0","library(quanteda.textmodels)"
+"0","library(scales)"
+"0","library(ggwordcloud)"
+"0","library(readr) #lire les donnees"
+"0","library(pals)"
+"0","library(ggrepel) #gestion des labels"
+"0","library(plotly)"
+"2","Warning: le package ‘plotly’ a été compilé avec la version R 4.0.5"
+"2","Registered S3 methods overwritten by 'htmltools':
+  method               from         
+  print.html           tools:rstudio
+  print.shiny.tag      tools:rstudio
+  print.shiny.tag.list tools:rstudio
+"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","
+Attachement du package : ‘plotly’
+
+"
+"2","The following object is masked from ‘package:igraph’:
+
+    groups
+
+"
+"2","The following object is masked from ‘package:ggmap’:
+
+    wind
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
+"0","library(doc2vec)"
+"2","Warning: le package ‘doc2vec’ a été compilé avec la version R 4.0.5"
+"0","library(tidyr)"
+"0","library(word2vec)"
+"2","Warning: le package ‘word2vec’ a été compilé avec la version R 4.0.5"
+"0","library(uwot)"
+"2","Warning: le package ‘uwot’ a été compilé avec la version R 4.0.5"
+"2","Le chargement a nécessité le package : Matrix
+"
+"2","Warning: le package ‘Matrix’ a été compilé avec la version R 4.0.5"
+"2","
+Attachement du package : ‘Matrix’
+
+"
+"2","The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+"
+"0","library(lsa)"
+"2","Le chargement a nécessité le package : SnowballC
+"
+"0","library(Rtsne)"
+"2","Warning: le package ‘Rtsne’ a été compilé avec la version R 4.0.5"
+"0","library(text)"
+"2","Warning: le package ‘text’ a été compilé avec la version R 4.0.5"
+"2","[0;34mThis is text (version 0.9.50). 
+[0m[0;32mText is new and still rapidly improving.
+               
+Newer versions may have improved functions
+               and updated defaults to reflect current
+               understandings of the state-of-the-art. 
+Please
+               send us feedback based on your experience.[0m
+"
+"2","[0;34mtextrpp python option is already set, text will use: condaenv = ""textrpp_condaenv""[0m
+"
+"2","[nltk_data] Downloading package punkt to
+[nltk_data]     C:\Users\33623\AppData\Roaming\nltk_data..."
+"2","
+"
+"2","[nltk_data]   Package punkt is already up-to-date!
+"
+"2","[0;32m
+Successfully initialized text required python packages.
+[0m
+"
+"2","[0;34mPython options: 
+ type = ""textrpp_condaenv"", 
+ name = ""textrpp_condaenv"".[0m
+"
+"0","library('extrafont') #c'est pour igraph"
+"0","# Import des fontes du système - cela peut être long"
+"0","#font_import()"
+"0","#fonts() # Liste des polices disponibles"
+"0","#loadfonts(device = ""pdf"") # Indiquer device = ""pdf"" pour produire un pdf "
+"0",""
+"0","theme_set(theme_minimal())"
+"0",""
+"0","col<- c(""#ca7dcc"",""#fb6a4a"",""orange"",""#67000d"", ""firebrick"", ""pink"", ""ivory3"",""skyblue"")"
+"0",""

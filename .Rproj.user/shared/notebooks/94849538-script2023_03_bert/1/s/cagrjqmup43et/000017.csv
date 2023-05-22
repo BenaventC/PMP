@@ -1,0 +1,8 @@
+"0",""
+"0","test2<-foo[,3:1538] %>%   "
+"0","  summarise_all(mean)"
+"0",""
+"0","test1<-foo %>% "
+"0","  summarise(words=last(words),"
+"0","            n=sum(n))"
+"0","test_a<-cbind(test1,test2)"

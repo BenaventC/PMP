@@ -1,0 +1,5 @@
+"0",""
+"0","# filtrage du corpus"
+"0",""
+"0","dn<- dn%>%filter(n_words>50 & n_words<1000)"
+"0",""
