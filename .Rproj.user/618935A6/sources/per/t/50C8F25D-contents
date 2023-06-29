@@ -1,0 +1,1065 @@
+---
+title: "PMP 40ans : une analyse textuelle de la production"
+author: "CB MB SB"
+format:
+  html:
+    mermaid:
+      theme: forest
+subtitle: "Compter les mots" 
+title-block-banner: img01.jpeg
+date: today
+execute : 
+  message: false
+  warning: false
+code-fold: true
+editor: visual
+---
+
+```{r 01}
+#tool box
+library(tidyverse) #on ne peut plus s'en passer
+library(quanteda) # les bases du nlp
+library(quanteda.textstats)
+library(quanteda.textmodels)
+library(scales)
+library(ggwordcloud)
+library(ggrepel) #gestion des labels
+library(ggraph) 
+library(ggcorrplot)
+library(flextable)
+library(Rtsne)
+# Import des fontes du système - cela peut être long
+#font_import()
+#fonts() # Liste des polices disponibles
+#loadfonts(device = "pdf") # Indiquer device = "pdf" pour produire un pdf 
+
+theme_set(theme_minimal())
+
+# en fait on fait en noir et blanc
+
+col<- c("purple", "#ca7dcc","#fb6a4a","orange",
+        "#67000d", "firebrick","coral1" ,"pink", 
+        "ivory3" , "grey","brown4", "skyblue", "blue", "darkblue", 
+        "black","darkgreen", "chartreuse3", "chartreuse1")
+
+```
+
+# Le problème
+
+Analyser les thématiques de recherche de la revue PMP qui fête ses 40 ans et qui se définit ainsi :
+
+"Depuis sa fondation en 1983 par Patrick Gibert et Jean-Claude Thoenig, la revue Politiques et Management Public a pour objectif de publier des recherches rendant compte scientifiquement de tous les aspects des fonctionnements et des évolutions des organisations publiques au sens large -- Etat et collectivités territoriales, administrations hospitalières, agences, entreprises publiques et concessionnaires, associations... -- mais aussi du développement et des transformations de l'action publique, que celle-ci soit sectorielle ou transversale, européenne, nationale ou locale. Revue académique trimestrielle Politiques et Management Public entend favoriser la diversité et l'originalité des approches, empiriques, théoriques, nationales ou comparatives, mono ou pluridisciplinaires. Par ses publications et l'organisation de rencontres, la revue a vocation à animer les débats sur les mutations des organisations publiques, les évolutions de leur gestion et les formes traditionnelles ou renouvelées de l'action publique. Politiques et Management Public s'adresse au milieu académique mais aussi à un large public de responsables politiques, administratifs et associatifs."
+
+# Données
+
+Au préalable un pré-traitement sous la forme d'une correction semi-automatique des erreurs de typographie (OCR et hyphénation), de graphie (orthographe), de ponctuation (guillemets et symbole), d'accentuation. 4 heures de travail.
+
+```{r 02}
+PMP <- read_csv("data/PMPLast3.csv", 
+    locale = locale(encoding = "WINDOWS-1252"))
+dn<-PMP %>% 
+  select(Key,`Publication Year`,Title, `Abstract Note`, Issue, Volume)%>% 
+  rename(Year=`Publication Year`, Abstract=`Abstract Note`) %>% 
+  mutate(text=paste0(Title,". ", Abstract),
+         nchar=nchar(text),
+         n_words = stringr::str_count(text, ' ')+1,
+         decade=ifelse(Year<1990,"1980",
+              ifelse(Year>1989 & Year<1995,"1990",
+                ifelse(Year>1994 & Year<2000,"1995",
+                       ifelse(Year>1999 & Year<2005,"2000",
+                              ifelse(Year>2004 & Year<2010,"2005",
+                                  ifelse(Year>2009 & Year<2015,"2010",
+                                          ifelse(Year>2014 & Year<2020,"2015","2020"))))))), 
+         Issue2=ifelse(str_sub(Issue, 1,3)=="Vol",str_sub(Issue, -1),Issue), 
+         Issue2=ifelse(Issue2=="1-2",1, ifelse(Issue2=="3-4",3, Issue2)),
+         x=as.numeric(Issue2)/4,
+         numéro=Year+x)
+```
+
+## La taille des résumés
+
+L'unité textuelle est le résumé que complète le titre en première phrase.
+
+```{r 02b}
+
+ggplot(dn, aes(x=n_words))+
+#  geom_histogram(binwidth = 10)+
+  geom_density(adjust = .5)+
+  theme_minimal()+
+  labs(title= "Distribution du nombre de tokens par résumé", 
+       x="Nombre de tokens (mots, ponctuations, symboles, nombres)",
+       y="Densité de probabilité")+
+  scale_x_log10()
+
+# filtrage du corpus
+
+dn<- dn%>%filter(n_words>50 & n_words<1000)
+
+```
+
+## Evolution de la production
+
+Un cycle de vie typique ? Croissance, maturité , déclin avec un tournant en 2005 ? La difficulté à alimenter la revue ?
+
+```{r 03}
+
+dn_year<-dn %>% 
+  group_by(Year) %>% 
+  summarise(n_abs=n(),n_words=sum(n_words))
+
+ggplot(dn_year, aes(x=Year,y=n_abs))+
+  geom_smooth(method = "loess",span=.35, color="Coral2")+
+  labs(title="Evolution du nombre d'articles par an",
+       y="nombre de papiers",
+       x="Année de publication",caption="corpus PMP")+
+  scale_x_continuous(breaks=c(1983, 1985,1990,1995,2000,2005,2010, 2015, 2020, 2023))+
+  ylim(0,40)
+
+ggsave("./images/pmp_n_articles_an.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+## Stabilité de la taille des résumés
+
+le manque des mots-clés
+
+```{r 05}
+
+ggplot(dn_year, aes(x=Year,y=n_words/n_abs))+
+  geom_smooth(method = "loess",span=.4,color="darkgreen")+
+  labs(title="Evolution du nombre moyen de mots par abstract",
+       y="Nombre moyen de mots",
+       x="Année de publication",caption="corpus PMP")+
+  scale_x_continuous(breaks=c(1983, 1985,1990,1995,2000,2005,2010, 2015, 2020, 2023))+
+  ylim(100,250)
+
+ggsave("./images/evol1.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+# Analyse globale du lexique
+
+On va compter les mots du corpus en otant les stopwords. On cherche à identifier les expressions par une méthode de collocation.
+
+en tfidf pour pondérer la généralité. Certains mots se retrouvent dans tous les textes, s'ils sont fréquents ils sont aussi très peu distinctifs.
+
+## collocations
+
+Avec les collocations parce que ce type de langage favorise les expressions composées : par exemple "service public"
+
+```{r 06}
+#| tab.id: bookmark_id
+#| tbl-cap: "Les collocations principales"
+
+# tokenization
+corp<-corpus(dn$text, docvars =dn)
+toks <- tokens(corp, remove_punct = TRUE, padding=TRUE)%>% 
+ tokens_select(pattern = stopwords('french'), selection = 'remove')
+
+#collocation
+
+tstat_col_caps <- 
+  tokens_select(toks, case_insensitive = TRUE,
+                                padding = TRUE) %>% 
+           textstat_collocations(min_count = 7, size=2:5)%>%
+  filter(lambda>8 & z>4) %>% as.data.frame()
+
+ft<-flextable(tstat_col_caps)
+ft <- theme_vanilla(ft)
+ft <- add_footer_lines(ft, "")
+ft <- color(ft, part = "footer", color = "#666666")
+ft <- set_caption(ft, caption = "Les collocations principales")
+
+ft
+
+```
+
+## Un dictionnaire
+
+On intègre ces expressions dans le vocabulaire. et avec quelques manipulations on établit le dictionnaire.
+
+```{r 06b}
+#integration dans le lexique
+toks_comp <- tokens_compound(toks, pattern = tstat_col_caps) 
+
+#dfm
+dfm <-  dfm(toks_comp)
+
+# Dictionnaire et métriques
+tstat_freq <- as.data.frame(textstat_frequency(dfm))
+
+# La taille du lexique
+N<-as.numeric(nrow(tstat_freq))
+# Le nombre de token 
+M=sum(tstat_freq$frequency)
+# Le calcul des statistique
+tstat_freq<-tstat_freq %>% 
+  mutate(idf=log(N/docfreq),
+         tfidf=(frequency/M)*idf)
+min=72
+max=720
+#on sélectionne les rank premiers 
+tstat_freq2<- tstat_freq %>%
+  filter(frequency> min & frequency <max) #420
+
+#une illustration 
+set.seed(42)
+ggplot(tstat_freq2, aes(label = feature, size = tfidf)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 5) +
+  scale_color_discrete()+
+  labs(title="Mots les plus fréquents dans les titres et résumés des articles de PMP",
+       subtitle = paste0("la taille des mots est proportionnelle au tfidf - `\non écrème les termes les plus fréquents. Min = ", min, " Max=",max),
+       caption=NULL)
+
+ggsave("./images/lexic2.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+Il comprend x termes différents.
+
+## Evolution dans le temps : un critère de keyness
+
+On peut donner la même représentation par groupe quinquénal, mais ce n'est pas assez discriminant. Une analyse en keyness serait sans doute meilleure
+
+```{r 07}
+quant_deca<- toks_comp %>% 
+  tokens_group(groups = decade)
+  
+dfm<- quant_deca %>%dfm() %>% 
+  dfm_group(groups=decade)
+
+chi<-12
+keyness1980<-textstat_keyness(dfm, target = "1980") %>%as.data.frame()%>% mutate(decade="1980")%>%filter(abs(chi2)>chi)
+keyness1990<-textstat_keyness(dfm, target = "1990") %>%as.data.frame()%>% mutate(decade="1990")%>%filter(abs(chi2)>chi)
+keyness1995<-textstat_keyness(dfm, target = "1995") %>%as.data.frame()%>% mutate(decade="1995")%>%filter(abs(chi2)>chi)
+keyness2000<-textstat_keyness(dfm, target = "2000") %>%as.data.frame()%>% mutate(decade="2000")%>%filter(abs(chi2)>chi)
+keyness2005<-textstat_keyness(dfm, target = "2005") %>%as.data.frame()%>% mutate(decade="2005")%>%filter(abs(chi2)>chi)
+keyness2010<-textstat_keyness(dfm, target = "2010") %>%as.data.frame()%>% mutate(decade="2010")%>%filter(abs(chi2)>chi)
+keyness2015<-textstat_keyness(dfm, target = "2015") %>%as.data.frame()%>% mutate(decade="2015")%>%filter(abs(chi2)>chi)
+keyness2020<-textstat_keyness(dfm, target = "2020") %>%as.data.frame()%>% mutate(decade="2020")%>%filter(abs(chi2)>chi)
+
+keyness<-rbind(keyness1980, keyness1990,keyness1995, keyness2000, keyness2005, keyness2010, keyness2015,keyness2020)
+
+keyness$decade=as.factor(keyness$decade)
+
+ggplot(keyness, aes(label=feature, group=decade))+
+  geom_text_wordcloud(aes(label=feature,size=chi2), color=ifelse(keyness$chi2>0, "grey10", "grey80")) +
+  scale_size_area(max_size = 7) +
+  labs(title="Mots les plus fréquents dans les titres et résumés des articles de PMP",
+       subtitle = paste0("La taille des caractères est proportionnel au chi2>", chi),
+       caption="PMP data")+
+  facet_wrap(~decade, ncol=2)
+
+ggsave("./images/keyness_word0.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+## Comptons les mots
+
+Plutôt que de compter globalement, on va compter analytiquement. On va chercher des catégories précises. en saisissant les mots par des regex, ou expression régulières. Ce sont de petite formule qui permettent de trouver des pattern particulier. Une date par exemple qui s'exprime dans une forme xx/xx/xxx où les x sont des chiffres. Dans notre cas prenons l'exemple du terme "organisation". il peut prendre de nombreuses formes ( morphologie): organisation, organisations, organisationnel,organisationnelle, organisationnelles, Organisation ... On va donc compter les mots avec cette méthode qui permet de saisir une grande part de la variété morphologique qu'il prennent dans le texte.
+
+Il faut aussi se doter d'une métrique. Certains sont peu fréquents, d'autres le sont plus, mais cela dépend aussi du volume : un mot peut être plus fréquent simplement par ce qu'il y a plus de mots prononcés dans le segment d'étude, il faut donc normaliser en rapportant la fréquence des mots dans le segment t, au nombres de mots produit au temps t. C'est une mesure de densité.On la calcule au niveau du texte, on la moyenne à l'année, et on la lisse par une méthode de loess avec un span de 0.45.
+
+## Une petite ontologie
+
+Avant de compter il faut construire des catégories. On les retrouvera techniquement par des méthode de regex pour saisir la variété des morphèmes et des flexions.
+
+Ce qui caractérise la revue s'est une dualité politiques publique et management public, le premier terme se construisant dans l'idée que l'état agit sur la société et l'économie par des politiques publiques, qui souvent sont sectorielles, et dont les contenus et orientation doté d'une sorte de permanence (par la norme et le droit), sont redéfini par la force politique. Le second se rapporte au fait organisationnel, celui qui se manifeste dans le corps de l'état, ses administrations, ses agences dont la finalité est justement la mise en oeuvre des premières.
+
+Politiques publiques -\> Institution-\>Management Public -\> Performance et organisations
+
+flowchart LR
+
+Institutions\[Institutions\] \--\> Management\[Management\]
+
+PP\[Politiques Publiques\] \--\> Management\[Management\]
+
+Institutions\[Institutions\] \--\> PP\[Politiques Publiques\]
+
+PP\[Politiques Publiques\] \--\> Performance\[Performance\]
+
+Management\[Management\]\--\> Performance\[Performance\]
+
+Epoque\[Epoque\] \--\> Management\[Management\]
+
+Epoque\[Epoque\] \--\> Institutions\[Institutions\]
+
+Chacune de ces catégories se déclinent en concepts, puis en termes, et sont opérationalisés par des regex qui permettent d'en capturer les variations.
+
+flowchart TD
+
+Catégories\[Catégories\] \--\> Concept\[Concepts\]
+
+subgraph 2
+
+Catégories\[Catégories\] \--\> éléments1\[Eléments du \\nmanagement\]
+
+Catégories\[Catégories\] \--\> éléments2\[Institutions\]
+
+Catégories\[Catégories\] \--\> éléments3\[Performances\]
+
+Catégories\[Catégories\] \--\> éléments4\[Politiques Publiques\]
+
+end
+
+subgraph 1
+
+Concept\[Concept\] \--\> Termes1\[Termes\]
+
+end
+
+Termes1\[Termes\] \--\> subs\[Substantifs ...\]
+
+subgraph 0
+
+Termes1\[Termes\] \--\> Regex\[Regex\]
+
+subs\[Substantifs ...\]\--\> Regex\[Regex\]
+
+end
+
+autre tentative
+
+```{r 08}
+#pour les lissages
+
+span<-0.45
+```
+
+Les catégories que l'on va suivre sont les suivantes
+
+# Politiques et Management publics?
+
+## Les éléments du management public
+
+```{r 09a}
+#champs
+dn$PolitiquePublique<-str_count(dn$text, pattern = "[P|p]olitique.*\\s[P|p]ublique.*")/dn$n_words
+dn$Administration<-str_count(dn$text, pattern = "[A|a]dmini.*")/dn$n_words
+dn$Gestion<-str_count(dn$text, pattern = "[G|g]estion.*")/dn$n_words
+dn$Management<-str_count(dn$text, pattern = "[M|m]anag.*")/dn$n_words
+dn$ServicePublic<-str_count(dn$text, pattern = "[S|s]ervice.*[:blank:][P|p]ubli.*")/dn$n_words
+dn$Juridique<-str_count(dn$text, pattern = "[J|j]u[r|d|s][i|t].*")/dn$n_words+
+  str_count(dn$text, pattern = "[D|r]roit.*")/dn$n_words
+#fonctions
+dn$Marketing<-str_count(dn$text, pattern = "[M|m]arket.*")/dn$n_words+
+  str_count(dn$text, pattern = "[M|m]arque.*")/dn$n_words
+dn$RH<-str_count(dn$text, pattern = "[RH|rh].*")/dn$n_words+
+  str_count(dn$text, pattern = "[R|r]essources.*.*[:blank:][H|u]main.*")/dn$n_words
+dn$Stratégie<-str_count(dn$text, pattern = "[S|s]trat.*")/dn$n_words
+dn$Comptabilité<-str_count(dn$text, pattern = "[C|c]ompta.*")/dn$n_words
+dn$Projet<-str_count(dn$text, pattern = "[P|r]ojet.*")/dn$n_words
+dn$Finance<-str_count(dn$text, pattern = "[F|f]inanc.*")/dn$n_words
+dn$Numérique<-str_count(dn$text, pattern = "[N|u]méri.*")/dn$n_words+
+  str_count(dn$text, pattern = "[I|i]nformati[q,c]m[u,i].*")/dn$n_words+
+  str_count(dn$text, pattern = "[I|i]nformatisat.*")/dn$n_words
+
+foo<-dn %>% 
+  group_by(Year)%>% 
+  summarise(Administration= mean(Administration),
+            Juridique= mean(Juridique, na.rm=TRUE),
+            PolitiquePublique=mean(PolitiquePublique, na.rm=TRUE),
+            Gestion=mean(Gestion, na.rm=TRUE),
+            Management=mean(Management, na.rm=TRUE),
+            ServicePublic=mean(ServicePublic, na.rm=TRUE),
+            Marketing=mean(Marketing, na.rm=TRUE),
+            RH=mean(RH, na.rm=TRUE),
+            Stratégie=mean(Stratégie, na.rm=TRUE),
+            Comptabilité=mean(Comptabilité, na.rm=TRUE),
+            Projet=mean(Projet, na.rm=TRUE),
+            Finance=mean(Finance, na.rm=TRUE),
+            Numérique=mean(Numérique, na.rm=TRUE),
+            ) 
+
+foo1<-foo%>%
+  pivot_longer(-Year, names_to = "keyword",values_to = "n")
+
+foo2<-foo1 %>%
+  group_by(keyword)%>%
+  summarise(Densité=mean(n, na.rm=TRUE),
+#            min=quantile(n, probs= 0.25),
+#            max=quantile(n, probs= 0.75),
+             m=n(),
+             se=sd(n)/sqrt(m))
+
+ggplot(foo2, aes(x=reorder(keyword, Densité), y=Densité))+
+  geom_bar(stat="identity", fill="Grey65")+
+  geom_errorbar(aes(ymin=Densité-se, ymax=Densité+se), width=.2,
+                 position=position_dodge(.9)) +
+    scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  coord_flip()+ 
+  labs(title="Fréquence de citations des termes clés", 
+              subtitle="Les éléments du management public",
+       x=NULL)
+  
+ggsave("./images/keyword11.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+```{r 09b}
+
+foo3<-foo %>%
+  select(2:14)
+
+r<-cor(foo3)
+
+ggcorrplot(r, hc.order = TRUE, type = "lower",
+   outline.col = "white",
+   colors = c("Grey80", "white","Grey80" ) , lab=TRUE, lab_size=2, tl.cex=9)+
+  labs(title="Matrice des corrélations temporelles des termes clés",
+       subtitle = "Les éléments du management public")
+ggsave("./images/keyword12.jpeg", width = 27, height = 18, units = "cm")
+
+
+```
+
+```{r 09c}
+
+foo1<-foo1 %>%left_join(foo2)
+ggplot(foo1, aes(x=Year, y=n, group=keyword))+
+  geom_smooth(method="loess", alpha=0, span=span, aes(color=keyword), linewidth=0.5)+
+  scale_colour_grey()+
+  scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  labs(y="densité", 
+       x=NULL, 
+       title = "Fréquence des termes",
+       subtitle="Les éléments du management public")+
+  facet_wrap(vars(keyword), scale="free")+
+  theme(legend.position="none")+theme(axis.text.y = element_text(size = 7,angle = 0),
+                                      axis.text.x = element_text(size = 7,angle = 0))
+
+ggsave("./images/keyword13.jpeg", width = 27, height = 18, units = "cm")
+
+
+```
+
+### tsne
+
+```{r 09d}
+
+d<- 1-r
+
+#library(Rtsne)
+tsne_out <- Rtsne(d, perplexity=3) # Run TSNE
+set.seed(123)
+TSNE<-cbind(tsne_out$Y,rownames(d)) %>%as.data.frame() %>%
+  rename(keyword=3)%>%
+  left_join(foo2)
+TSNE$V1<-as.numeric(TSNE$V1)
+TSNE$V2<-as.numeric(TSNE$V2)
+ggplot(TSNE,aes(x=V1, y=V2,label=V3))+
+  geom_text_repel(aes(label=keyword,size=log10(Densité)))+
+  theme(legend.position="none")+
+  labs(title="Fréquence de citation des termes clés",
+       subtitle=" Les éléments du management public",
+       x=NULL, y=NULL,
+       caption = "Modèle Tsne - perplexité=5\nsur D=1-r")
+
+ggsave("./images/keyword14.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+les Ressources Humaines dominent, sa densité est de 0.8% quand pour les autres elle est de 0.2%. le management public est d'abord considéré dans cette ressources par la lentille de la ressource humaine. Le corps de l'état est une chair de fonctionnaires. C'est une obsession constante.
+
+le management et la stratégie gagnent du terrain.
+
+le management croît, l'administration décline , peut-être un sursaut, la stratégie et le management progresse, la gestion recule ? les politiques publique prennent un peu d'importance.
+
+## Institutions et champs
+
+-   Institutions internationales
+-   Etat
+-   région
+-   Collectivité locales et communales, local,métropole, mairie, municipalité
+-   PPP
+-   Agence
+-   services publics
+
+```{r 10a}
+#Nation
+dn$Etat<-str_count(dn$text, pattern = "[E|é|É]tat.*")/dn$n_words+
+  str_count(dn$text, pattern = "[G|g]ouverne.*")/dn$n_words
+dn$Administration<-str_count(dn$text,"[A|a]dministrat.*")/dn$n_words+
+  str_count(dn$text,"[P|r]éfe[c|r].*")/dn$n_words
+
+#Local
+dn$Collectivité<-str_count(dn$text, pattern = "[C|c]ollectivit.*")/dn$n_words+
+  str_count(dn$text,".*[L|l]oca.*")/dn$n_words
+dn$Région<-str_count(dn$text, pattern = "[R|r][é|e]gion.*")/dn$n_words
+dn$Département<-str_count(dn$text, pattern = "[D|d][é|e]partement.*")/dn$n_words
+dn$Territoire<-str_count(dn$text,"[T|t][e|é]rrit[o, oi].*")/dn$n_words
+dn$Commune<-str_count(dn$text,".*[C|c]ommun[e,al].*")/dn$n_words+
+  str_count(dn$text, pattern = "[M|m]unicip.*")/dn$n_words
+dn$Entreprise<-str_count(dn$text,".*[E|n]trepr[e|is].*")/dn$n_words+
+  str_count(dn$text, pattern = "[P|p]priv.*")/dn$n_words
+dn$Association<-str_count(dn$text,".*[A|a]ssocia.*")/dn$n_words+
+  str_count(dn$text, pattern = "ONG.*")/dn$n_words
+dn$Syndicat<-str_count(dn$text,".*[S|s]yndica.*")/dn$n_words +
+  str_count(dn$text, pattern = "[F|f]édéra.*")/dn$n_words
+dn$Université<-str_count(dn$text,"[U|u]niversit.*")/dn$n_words
+dn$Ecole<-str_count(dn$text,"[E|é|É]col.*")/dn$n_words+ 
+  str_count(dn$text,"[E|e|É]nseign.*")/dn$n_words
+dn$Hopital<-str_count(dn$text, pattern = "[H|h][ô|o][.|s]pital.*")/dn$n_words+
+  str_count(dn$text, pattern = "[S|a]nté.*")/dn$n_words
+dn$PoliceJustice<-str_count(dn$text,"[P|p]olic.*")/dn$n_words+ 
+  str_count(dn$text,"[J|u]stic.*")/dn$n_words
+dn$Armée<-str_count(dn$text,"[A|a]rmé.*")/dn$n_words+
+  str_count(dn$text,"[M|m]ilitai.*")/dn$n_words
+dn$SécuritéSociale<-str_count(dn$text,"[S|s]écur.*[S|s]ocia.*")/dn$n_words+
+  str_count(dn$text,"[U|r][S|s][A|a].*")/dn$n_words+
+  str_count(dn$text,"[A|a][N|n][E|e].*")/dn$n_words
+           
+#international
+dn$Europe<-str_count(dn$text, pattern = "[E|e]urop.*")/dn$n_words
+dn$International<-str_count(dn$text,"[I|i]nterna.*")/dn$n_words
+
+foo<-dn %>% 
+  group_by(Year)%>% 
+  summarise(Collectivité=mean(Collectivité, na.rm=TRUE),
+            Région=mean(Région, na.rm=TRUE),
+            Département=mean(Département, na.rm=TRUE),
+            État=mean(Etat, na.rm=TRUE),
+            Europe=mean(Europe, na.rm=TRUE),
+            International=mean(International, na.rm=TRUE),
+            Territoire=mean(Territoire, na.rm=TRUE),
+            Administration=mean(Administration, na.rm=TRUE),
+            Commune=mean(Commune, na.rm=TRUE),
+            Entreprise=mean(Entreprise, na.rm=TRUE),
+            Association=mean(Association, na.rm=TRUE),
+            Syndicat=mean(Syndicat, na.rm=TRUE),
+            Université =mean(Université, na.rm=TRUE),
+            Hopital =mean(Hopital, na.rm=TRUE),
+            Ecole =mean(Ecole, na.rm=TRUE),
+            PoliceJustice=mean(PoliceJustice, na.rm=TRUE),
+            Armée=mean(Armée, na.rm=TRUE),
+            SécuritéSociale= mean(SécuritéSociale, na.rm=TRUE)
+  )
+
+
+foo1<-foo%>%
+  pivot_longer(-Year, names_to = "keyword",values_to = "n")
+
+foo2<-foo1 %>%
+  group_by(keyword)%>%
+  summarise(Densité=mean(n, na.rm=TRUE),
+#            min=quantile(n, probs= 0.25),
+#            max=quantile(n, probs= 0.75),
+             m=n(),
+             se=sd(n)/sqrt(m))
+
+ggplot(foo2, aes(x=reorder(keyword, Densité), y=Densité))+
+  geom_bar(stat="identity", fill="Grey65")+
+  geom_errorbar(aes(ymin=Densité-se, ymax=Densité+se), width=.2,
+                 position=position_dodge(.9)) +
+    scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  coord_flip()+ 
+  labs(title="Fréquence de citations des termes clés", 
+              subtitle="Les institutions",
+       x=NULL)
+  
+ggsave("./images/keyword21.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### Corrélations des citations d'institutions
+
+```{r 10b}
+foo3<-foo %>%
+  select(2:19)
+
+r<-cor(foo3)
+
+ggcorrplot(r, hc.order = TRUE, type = "lower",
+   outline.col = "white",
+   colors = c("Grey80", "white","Grey80" ) , lab=TRUE, lab_size=2, tl.cex=9)+
+  labs(title="Matrice des corrélations temporelles des termes clés",
+       subtitle = "Les institutions")
+
+ggsave("./images/keyword22.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### Evolution
+
+```{r 10c}
+
+foo1<-foo1 %>%left_join(foo2)
+ggplot(foo1, aes(x=Year, y=n, group=keyword))+
+  geom_smooth(method="loess", alpha=0, span=span, aes(color=keyword), linewidth=.5)+
+  scale_colour_grey()+
+  scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  labs(y="densité", 
+       x=NULL, 
+       title = "Fréquence des termes",
+       subtitle = "Les institutions")+facet_wrap(vars(keyword), scale="free")+
+  theme(legend.position="none")+theme(axis.text.y = element_text(size = 7,angle = 0),
+                                      axis.text.x = element_text(size = 6,angle = 0))
+
+ggsave("./images/keyword23.jpeg", width = 27, height = 18, units = "cm")
+
+
+```
+
+### tsne
+
+```{r 10d}
+d=1-r
+library(Rtsne)
+tsne_out <- Rtsne(d, perplexity=5) # Run TSNE
+set.seed(123)
+TSNE<-cbind(tsne_out$Y,rownames(d)) %>%as.data.frame() %>%rename(keyword=3)%>%left_join(foo2)
+TSNE$V1<-as.numeric(TSNE$V1)
+TSNE$V2<-as.numeric(TSNE$V2)
+ggplot(TSNE,aes(x=V1, y=V2,label=V3))+
+  geom_text_repel(aes(label=keyword,size=log10(Densité)))+
+  theme(legend.position="none")+
+  labs(title="Fréquence de citation des termes clés",
+       subtitle="Les institutions",
+       x=NULL, y=NULL,
+       caption = "Modèle Tsne - perplexité=5\nsur D=1-r")
+
+ggsave("./images/keyword24.jpeg", width = 27, height = 18, units = "cm")
+
+
+```
+
+## la performance et l'organisation
+
+Les problèmes :
+
+-   modernisation et réforme, changement, planification
+
+-   efficacité/ performance /contrôle / rationalisation/ outcome efficience effectivité: RENDEMENT, coûts, rentabilité évaluation, mesure, indicateur, contrôle, équité, égalité, analyse de politique
+
+-   Organisation, Administration, hiérarchie, bureaucratie, Décentralisation/ décentralisation
+
+-   communs, participation
+
+-   financement, finance
+
+-   opération, exécution, décision, projet
+
+## Les éléments "Performance et organisation"
+
+```{r 11a}
+#performance
+
+dn$Performance<-str_count(dn$text,"[P|p]erform.*")/dn$n_words
+dn$Rentabilité<-str_count(dn$text,"[R|r]entab.*")/dn$n_words
+dn$Efficacité<-str_count(dn$text,"[E|e|É]fficac.*")/dn$n_words+
+  str_count(dn$text,"[E|e|É]fficien.*")/dn$n_words
+dn$Rentabilité<-str_count(dn$text,"[R|r]entab.*")/dn$n_words+
+  str_count(dn$text,"[P|p]rofit.*")/dn$n_words+
+  str_count(dn$text,"[R|r]endemen.*")/dn$n_words
+dn$Coûts<-str_count(dn$text,"[C|c]oût.*")/dn$n_words
+dn$Egalité<-str_count(dn$text,"[E|é|É]quit.*")/dn$n_words+
+  str_count(dn$text,"[E|é|É]galit.*")/dn$n_words
+
+dn$Evaluation<-str_count(dn$text,"[E|é|É]valu.*")/dn$n_words
+dn$Controle<-str_count(dn$text,"[C|c]ontrôl.*")/dn$n_words
+
+dn$Réforme<-str_count(dn$text,"[R|r]éform.*")/dn$n_words
+dn$Modernisation<-str_count(dn$text,"[M|m]odern.*")/dn$n_words
+dn$Rationalisation<-str_count(dn$text,"[R|r]ationali.*")/dn$n_words
+
+dn$Innovation<-str_count(dn$text,"[I|i]nnov.*")/dn$n_words
+dn$Organisation<-str_count(dn$text,"[O|o]rganis.*")/dn$n_words
+dn$Bureaucratie<-str_count(dn$text,"[B|b]ureau.*")/dn$n_words
+dn$Hiérarchie<-str_count(dn$text,"[H|h]i[é|e]rarc.*")/dn$n_words
+dn$Décision<-str_count(dn$text,"[D|d]écision.*")/dn$n_words
+dn$Centralisation<-str_count(dn$text,"[C|c]entrali.*")/dn$n_words
+dn$Changement<-str_count(dn$text,"[C|c]hangem.*")/dn$n_words
+
+
+foo<-dn %>% 
+  group_by(Year)%>% 
+  summarise(Performance=mean(Performance, na.rm=TRUE),
+            Rentabilité=mean(Rentabilité, na.rm=TRUE),
+            Efficacité=mean(Efficacité, na.rm=TRUE),
+            Evaluation=mean(Evaluation, na.rm=TRUE),
+            Coût=mean(Coûts, na.rm=TRUE),
+            Egalité=mean(Egalité, na.rm=TRUE),
+            Contrôle=mean(Controle, na.rm=TRUE),
+            Réforme=mean(Réforme, na.rm=TRUE),
+            Modernisation=mean(Modernisation, na.rm=TRUE),
+            Rationalisation=mean(Rationalisation, na.rm=TRUE),
+            Innovation=mean(Innovation, na.rm=TRUE),
+            Changement=mean(Changement, na.rm=TRUE),
+            Organisation=mean(Organisation, na.rm=TRUE),
+            Hiérarchie=mean(Hiérarchie, na.rm=TRUE),
+            Bureaucratie=mean(Bureaucratie, na.rm=TRUE),
+            Décision=mean(Décision, na.rm=TRUE),
+            Centralisation=mean(Centralisation, na.rm=TRUE)
+            ) 
+
+foo1<-foo%>%
+  pivot_longer(-Year, names_to = "keyword",values_to = "n")
+
+foo2<-foo1 %>%
+  group_by(keyword)%>%
+  summarise(Densité=mean(n, na.rm=TRUE),
+#            min=quantile(n, probs= 0.25),
+#            max=quantile(n, probs= 0.75),
+             m=n(),
+             se=sd(n)/sqrt(m))
+
+ggplot(foo2, aes(x=reorder(keyword, Densité), y=Densité))+
+  geom_bar(stat="identity", fill="Grey65")+
+  geom_errorbar(aes(ymin=Densité-se, ymax=Densité+se), width=.2,
+                 position=position_dodge(.9)) +
+    scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  coord_flip()+ 
+  labs(title="Fréquence de citations des termes clés", 
+              subtitle="Performance et organisations",
+       x=NULL)
+  
+ggsave("./images/keyword31.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### corrélation " Performance et organisation"
+
+```{r 11b}
+foo3<-foo %>%
+  select(2:18)
+
+r<-cor(foo3)
+
+ggcorrplot(r, hc.order = TRUE, type = "lower",
+   outline.col = "white",
+   colors = c("Grey80", "white","Grey80" ) , lab=TRUE, lab_size=2, tl.cex=9)+
+  labs(title="Matrice des corrélations temporelles des termes clés",
+       subtitle = "Performance et organisations")
+
+ggsave("./images/keyword32.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### Evolution " Performance et organisation"
+
+```{r 11c}
+
+foo1<-foo1 %>%left_join(foo2)
+ggplot(foo1, aes(x=Year, y=n, group=keyword))+
+  geom_smooth(method="loess", alpha=0, span=span, aes(color=keyword), linewidth=.5)+
+  scale_colour_grey()+
+  scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  labs(y="densité", 
+       x=NULL, 
+       title = "Fréquence des termes",
+       subtitle = "Performance et organisations")+facet_wrap(vars(keyword), scale="free")+
+  theme(legend.position="none")+
+  theme(axis.text.y = element_text(size = 7,angle = 0),
+                                      axis.text.x = element_text(size = 6,angle = 0))
+
+
+ggsave("./images/keyword33.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### tsne " Performance et organisation"
+
+```{r 11d}
+
+d<- 1-r
+
+library(Rtsne)
+tsne_out <- Rtsne(d, perplexity=2) # Run TSNE
+set.seed(123)
+TSNE<-cbind(tsne_out$Y,rownames(d)) %>%as.data.frame() %>%rename(keyword=3)%>%left_join(foo2)
+TSNE$V1<-as.numeric(TSNE$V1)
+TSNE$V2<-as.numeric(TSNE$V2)
+ggplot(TSNE,aes(x=V1, y=V2,label=V3))+
+  geom_text_repel(aes(label=keyword,size=Densité))+
+  theme(legend.position="none")+
+  labs(title="Fréquence de citation des termes clés",
+       subtitle="Performance et organisations",
+       x=NULL, y=NULL,
+       caption = "Modèle Tsne - perplexité=5\nsur D=1-r")
+
+
+ggsave("./images/keyword34.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+## Politiques publiques
+
+Les politiques publiques sont des combinaisons de régulations, de taxes, de discours et de subventions qui visent dans un domaine donné à un certain résultats. Les buts les moyens et les priorités peuvent être discutées, mais souvent les politiques publiques sont constantes car le problème qu'elle traite ne dépendant toujours d'une évaluation politiques, il peut être un lieu commun, par exemple la réduction des morts et des blessés de la circulation. Depuis les années 60 ce coût a été réduit par 5, par une accumulation de progrès techninque (les voiture, la conduite), et de normes souvent contraignantes concernant la consommation d'alcool, les limites de vitesses, des dispositifs de ralentissement etc.
+
+Les politiques publiques ont leurs ve qui n'est pas forcément celle de la vie politique.
+
+Les politiques publiques sont souvent sectorielles.
+
+-   Recherche
+-   Protection sociale
+-   Retraites
+-   Développement économique
+-   fiscalité, dette
+-   Université et enseignement étudiants université
+
+```{r 12a}
+#écologie/environnement
+dn$Ecologie<-str_count(dn$text,".*[É|E|e]colo.*")/dn$n_words+
+  str_count(dn$text,".*[E|e]nvironnem.*")/dn$n_words+
+  str_count(dn$text,".*[C|c]hasse.*")/dn$n_words
+
+#Eau et déchets
+
+dn$EauDéchet<-str_count(dn$text,".*[E|e]au.*")/dn$n_words+
+  str_count(dn$text, pattern = "[D|d]échet.*")/dn$n_words+
+  str_count(dn$text, pattern = "[O|r]dure.*")/dn$n_words+
+    str_count(dn$text, pattern = "[R|r]écupéra.*")/dn$n_words
+
+dn$Santé<-str_count(dn$text, pattern = "[S|s]an[i]t.*")/dn$n_words+
+  str_count(dn$text, pattern = "[P|r]éventi.*")/dn$n_words
+
+dn$Défense<- str_count(dn$text,".*[D|d]éfense.*")/dn$n_words +
+  str_count(dn$text, pattern = "[S|s]ouverain.*\\s[N|a]tion.*")/dn$n_words
+
+dn$Education<-str_count(dn$text,"[E|e|é|É]duc.*")/dn$n_words+
+  str_count(dn$text,"[E|e]nseignementduc.*")/dn$n_words+
+    str_count(dn$text,"[C|c]ollège.*")/dn$n_words
+
+dn$Social<- str_count(dn$text,".*[S|s]ocia.*")/dn$n_words
+dn$Emploi<- str_count(dn$text,".*[E|e]mp.*")/dn$n_words+ 
+  str_count(dn$text,".*[C|c]h[o|ô]m.*")/dn$n_words
+
+dn$Economie<- str_count(dn$text,".*[E|é|É|e]conomi.*")/dn$n_words+
+  str_count(dn$text,".*[C|c]roissance.*")/dn$n_words+
+  str_count(dn$text,".*[I|i]ndustri.*")/dn$n_words
+
+dn$Sécurité<- str_count(dn$text,".*[S|s|É]écurité.*")/dn$n_words+
+  str_count(dn$text,".*[I|i]ntérieur.*")/dn$n_words+ 
+  str_count(dn$text,".*[D|d]élinqu[a|e]n.*")/dn$n_words+
+  str_count(dn$text,".*[C|c]rimin.*")/dn$n_words+
+  str_count(dn$text,".*[P|p]olic.*")/dn$n_words
+
+dn$Logement<- str_count(dn$text,".*[L|l]ogemen.*")/dn$n_words+
+  str_count(dn$text,".*[H|hl]abita.*")/dn$n_words
+
+dn$Culture<- str_count(dn$text,".*[C|c]ulture.*")/dn$n_words+
+  str_count(dn$text,".*[A|a]rt.*")/dn$n_words+
+  str_count(dn$text,".*[M|m]usé.*")/dn$n_words+
+    str_count(dn$text,".*[M|m]usi[q,c].*")/dn$n_words
+
+
+dn$Agricole<- str_count(dn$text,".*[A|a]gric[u,o]l.*")/dn$n_words
+
+
+foo<-dn %>% 
+  group_by(Year)%>% 
+  summarise(Ecologie=mean(Ecologie, na.rm=TRUE),
+            Eau=mean(EauDéchet, na.rm=TRUE),
+            Santé=mean(Santé, na.rm=TRUE),
+            Défense=mean(Défense, na.rm=TRUE),
+            Education=mean(Education, na.rm=TRUE),
+            Social=mean(Social, na.rm=TRUE),
+            Emploi=mean(Emploi, na.rm=TRUE),
+            Economie=mean(Economie, na.rm=TRUE),
+            Sécurité=mean(Sécurité, na.rm=TRUE),
+            Logement=mean(Logement, na.rm=TRUE),
+            Culture=mean(Culture, na.rm=TRUE),
+            Agricole=mean(Agricole)
+            ) 
+
+foo1<-foo%>%
+  pivot_longer(-Year, names_to = "keyword",values_to = "n")
+
+foo2<-foo1 %>%
+  group_by(keyword)%>%
+  summarise(Densité=mean(n, na.rm=TRUE),
+#            min=quantile(n, probs= 0.25),
+#            max=quantile(n, probs= 0.75),
+             m=n(),
+             se=sd(n)/sqrt(m-1))
+
+ggplot(foo2, aes(x=reorder(keyword, Densité), y=Densité))+
+  geom_bar(stat="identity", fill="Grey65")+
+  geom_errorbar(aes(ymin=Densité-se, ymax=Densité+se), width=.2,
+                 position=position_dodge(.9)) +
+    scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  coord_flip()+ 
+  labs(title="Fréquence de citations des termes clés", 
+              subtitle="Les politiques publiques",
+       x=NULL)
+  
+ggsave("./images/keyword41.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### Corrélations "Politiques publiques"
+
+```{r 12b}
+foo3<-foo %>%
+  select(2:13) #%>% select(-6)
+
+r<-cor(foo3)
+
+ggcorrplot(r, hc.order = TRUE, type = "lower",
+   outline.col = "white",
+   colors = c("Grey80", "white","Grey80" ) , lab=TRUE, lab_size=3, tl.cex=8)+
+  labs(title="Matrice des corrélations temporelles des termes clés",
+       subtitle = "Les politiques publiques")
+
+ggsave("./images/keyword42.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### Evolution des citations " politiques publiques"
+
+```{r 12c}
+
+foo1<-foo1 %>%left_join(foo2)#%>%filter(keyword!="Souveraineté")
+
+ggplot(foo1, aes(x=Year, y=n, group=keyword))+
+  geom_smooth(method="loess", alpha=0, span=span, aes(color=keyword), linewidth=.5)+
+  scale_colour_grey()+
+  scale_y_continuous(labels=scales::percent,limits=c(0, NA))+
+  labs(y="densité", 
+       x=NULL, 
+       title = "Fréquence des termes",
+       subtitle = "Les politiques publiques")+facet_wrap(vars(keyword), scale="free")+
+  theme(legend.position="none")+
+  theme(axis.text.y = element_text(size = 7,angle = 0),
+                                      axis.text.x = element_text(size = 6,angle = 0))
+
+
+ggsave("./images/keyword43.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+### mapping des catégories "Politiques publiques"
+
+```{r 12d}
+perplexité=5
+d<- 1-r
+
+library(Rtsne)
+tsne_out <- Rtsne(d, perplexity=2) # Run TSNE
+set.seed(123)
+TSNE<-cbind(tsne_out$Y,rownames(d)) %>%as.data.frame() %>%
+  rename(keyword=3)%>%
+  left_join(foo2)
+TSNE$V1<-as.numeric(TSNE$V1)
+TSNE$V2<-as.numeric(TSNE$V2)
+
+ggplot(TSNE,aes(x=V1, y=V2,label=V3))+
+  geom_text_repel(aes(label=keyword,size=log(Densité)))+
+  theme(legend.position="none")+
+  labs(title="Fréquence de citation des termes clés",
+       subtitle="Les politiques publiques",
+       x=NULL, y=NULL,
+       caption = "Modèle Tsne - perplexité=5\nsur D=1-r")
+
+
+ggsave("./images/keyword44.jpeg", width = 27, height = 18, units = "cm")
+
+```
+
+# corrélations entre l'ensemble keywords
+
+```{r 13}
+
+foo<-dn %>%
+  select(Key,Year,15:72
+         ) %>% 
+  pivot_longer(-c(Key, Year), names_to = "variable", values_to = "taux") %>%
+  group_by(Year, variable)%>%
+  summarise(taux=mean(taux, na.rm=TRUE)) %>%
+  pivot_wider(Year, names_from = "variable", values_from = "taux") %>% 
+  dplyr::select(-Year)
+
+```
+
+```{r 14}
+
+r <-cor(foo[,2:59]) 
+
+library(ggcorrplot)
+
+ggcorrplot(r, hc.order = TRUE, type = "lower",
+   outline.col = "white",
+   colors = c("#6D9EC1", "white", "#E46726"), lab=FALSE, lab_size=2, tl.cex=7)
+
+ggsave("./images/keyword_cor.jpeg", width = 27, height = 18, units = "cm")
+
+library("FactoMineR")
+res.pca <- PCA(r, ncp=10,graph = FALSE)
+
+library("factoextra")
+eig.val <- get_eigenvalue(res.pca)
+
+fviz_pca_var(res.pca, col.var = "cos2",
+             gradient.cols = c("white", "#E7E200", "#FA5A07"),
+             repel = TRUE # Évite le chevauchement de texte
+             )
+fviz_pca_var(res.pca, axes= c(3,4),col.var = "cos2",
+             gradient.cols = c("white", "#E7E200", "#FA5E07"),
+             repel = TRUE # Évite le chevauchement de texte
+             )
+
+library(psych)
+
+mle <- fa(r,10,rotate="oblimin",fm="uls")
+summary(mle)
+
+fa.sort(mle,polar=FALSE)
+```
+
+## Un projection Tsne
+
+```{r 15}
+r <-cor(foo[,2:59]) 
+
+foo1<-foo%>%
+  pivot_longer(-Year, names_to = "keyword",values_to = "n")
+
+foo2<-foo1 %>%
+  group_by(keyword)%>%
+  summarise(Densité=mean(n, na.rm=TRUE),
+#            min=quantile(n, probs= 0.25),
+#            max=quantile(n, probs= 0.75),
+             m=n(),
+             se=sd(n)/sqrt(m))
+
+d<- 1-r
+
+
+set.seed(123)
+tsne_out <- Rtsne(d,   
+                  dims = 3,
+                  perplexity=5,is_distance=TRUE) # Run TSNE
+names<-rownames(d)
+TSNE<-cbind(tsne_out$Y,names) %>%
+  as.data.frame() %>%
+  rename(keyword=4)%>%
+  left_join(foo2)
+
+rownames(TSNE)<-names
+
+dist<-dist(TSNE[,1:3])
+
+
+cluster  <- hclust(dist, "ward.D", ) # "wrong"
+plot(cluster)
+memb <- cutree(cluster, k = 8)
+TSNE<-cbind(TSNE,memb)
+TSNE$V1<-as.numeric(TSNE$V1)
+TSNE$V2<-as.numeric(TSNE$V2)
+ggplot(TSNE,aes(x=V1, y=V2,label=keyword))+
+  geom_text_repel(aes(label=keyword,color=as.factor(memb),size=Densité), max.overlaps=Inf)+
+  theme(legend.position="none")+
+  labs(title="Fréquence de citation des termes clés",
+       subtitle=" Les éléments du management public",
+       x=NULL, y=NULL,
+       caption = "Modèle Tsne - perplexité=5\nsur D=1-r")
+
+ggsave("./images/keyword50.jpeg", width = 27, height = 18, units = "cm")
+
+
+
+
+```
+
+## typologie des papiers
