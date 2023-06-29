@@ -9,4 +9,4 @@ Analyses pour les 40 ans de de PMP
 
 3 - [Approche Doc2vec ](https://benaventc.github.io/PMP/script2023_02_w2c.html)
 
-[embed]https://benaventc./PMP/40ansdePMP.pdf[/embed]
+[embed]https://benaventc/PMP/40ansdePMP.pdf[/embed]
