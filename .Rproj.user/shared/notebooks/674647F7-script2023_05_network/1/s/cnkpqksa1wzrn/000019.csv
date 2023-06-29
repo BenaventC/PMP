@@ -1,8 +1,0 @@
-"0",""
-"0","#mesure de centralité"
-"0",""
-"0","between<-as.data.frame(betweenness(g1))%>% rename(between=`betweenness(g1)`)"
-"0","between$variable<-rownames(between)"
-"0","authors_short<-authors_short %>%"
-"0","  left_join(between)"
-"0","ggplot(authors_short,aes(x=log(n), y=log(between+1)))+geom_point()+geom_smooth()+theme_minimal()"

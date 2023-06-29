@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="CB">
+<meta name="author" content="CB MB SB">
+<meta name="dcterms.date" content="2023-06-29">
 
-<title>network</title>
+<title>PMP 40ans : une analyse textuelle de la production</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -68,213 +69,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="script2023_05_network_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="script2023_05_network_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="script2023_05_network_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: blue;
+      }
+</style>
 
 
 </head>
 
 <body class="fullcontent">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">network</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>CB </p>
-          </div>
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">PMP 40ans : une analyse textuelle de la production</h1>
+            <p class="subtitle lead">Analyse de réseau</p>
+                      </div>
   </div>
     
   
-    
-  </div>
-  
+  <div class="quarto-title-meta">
 
-</header>
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>CB MB SB </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 29, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co">#on ne peut plus s'en passer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.0     v readr     2.1.4
-v forcats   1.0.0     v stringr   1.5.0
-v ggplot2   3.4.2     v tibble    3.2.0
-v lubridate 1.9.2     v tidyr     1.3.0
-v purrr     1.0.1     -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
-i Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda) <span class="co"># les bases du nlp</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'quanteda' was built under R version 4.0.5</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in .recacheSubclasses(def@className, def, env): undefined subclass
-"numericVector" of class "Mnumeric"; definition not updated</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Package version: 3.0.0
-Unicode version: 13.0
-ICU version: 69.1
-Parallel computing: 4 of 4 threads used.
-See https://quanteda.io for tutorials and examples.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spacyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'spacyr' was built under R version 4.0.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr) <span class="co">#lire les donnees</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr) <span class="co">#manipuler le texte</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'pals' was built under R version 4.0.5</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape) <span class="co">#pour de jolis dendogrammes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ape' was built under R version 4.0.5</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'ape'
-
-The following object is masked from 'package:dplyr':
-
-    where</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext) <span class="co">#du nlp</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tidytext' was built under R version 4.0.5</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(proustr) <span class="co">#un package sympa pour les dicos</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'proustr'
-
-The following object is masked from 'package:tidytext':
-
-    stop_words</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mixr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: janeaustenr
-Loading required package: tm</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tm' was built under R version 4.0.5</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: NLP</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'NLP' was built under R version 4.0.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'NLP'
-
-The following objects are masked from 'package:quanteda':
-
-    meta, meta&lt;-
-
-The following object is masked from 'package:ggplot2':
-
-    annotate
-
-
-Attaching package: 'tm'
-
-The following object is masked from 'package:quanteda':
-
-    stopwords
-
-Loading required package: textometry
-Loading required package: ggmap
-Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
-Please cite ggmap if you use it! See citation("ggmap") for details.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(widyr)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'reshape2'
-
-The following object is masked from 'package:tidyr':
-
-    smiths</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph) <span class="co">#classic des reseaux</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'igraph' was built under R version 4.0.5</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'igraph'
-
-The following objects are masked from 'package:ape':
-
-    degree, edges, mst, ring
-
-The following objects are masked from 'package:lubridate':
-
-    %--%, union
-
-The following objects are masked from 'package:dplyr':
-
-    as_data_frame, groups, union
-
-The following objects are masked from 'package:purrr':
-
-    compose, simplify
-
-The following object is masked from 'package:tidyr':
-
-    crossing
-
-The following object is masked from 'package:tibble':
-
-    as_data_frame
-
-The following objects are masked from 'package:stats':
-
-    decompose, spectrum
-
-The following object is masked from 'package:base':
-
-    union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel) <span class="co">#gestion des labels</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggrepel' was built under R version 4.0.5</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggraph' was built under R version 4.0.5</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gglorenz) <span class="co">#courbe de concentration</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'gglorenz' was built under R version 4.0.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">'extrafont'</span>) <span class="co">#c'est pour igraph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'extrafont' was built under R version 4.0.5</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Registering fonts with R</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import des fontes du système - cela peut être long</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">#font_import()</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fonts() # Liste des polices disponibles</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#loadfonts(device = "pdf") # Indiquer device = "pdf" pour produire un pdf </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co">#on ne peut plus s'en passer</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda) <span class="co"># les bases du nlp</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spacyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr) <span class="co">#lire les donnees</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr) <span class="co">#manipuler le texte</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pals)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape) <span class="co">#pour de jolis dendogrammes</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext) <span class="co">#du nlp</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(proustr) <span class="co">#un package sympa pour les dicos</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mixr)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(widyr)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2) </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph) <span class="co">#classic des reseaux</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel) <span class="co">#gestion des labels</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph) </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gglorenz) <span class="co">#courbe de concentration</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">'extrafont'</span>) <span class="co">#c'est pour igraph</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Import des fontes du système - cela peut être long</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#font_import()</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#fonts() # Liste des polices disponibles</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#loadfonts(device = "pdf") # Indiquer device = "pdf" pour produire un pdf </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>Le projet est simple : ingérer près de 40 ans de production de la revue PMP, pour en retracer les évolutions principales en terme d’autorialité et de contenu thématique.</p>
 <p>C’est une démarche de lecture automatique et algorithmique qui vise à retracer la vie d’un processus de production éditoriale et d’une communauté intellectuelle. La communauté intellectuelle est initiée par les acteurs de la revue : comités, rédacteurs. Le processus de production dépend largement du régime de régulation de la communauté universitaire dont on sait qu’il est transformé conjointement par l’appétit des groupes éditoriaux, par l’“impératif politique de la divulgation d’indicateurs de performances, de l’évolution des technologie éditoriales, des modes de financements et de critères d’avancement des carrières.</p>
@@ -306,171 +173,110 @@ The following object is masked from 'package:base':
 <h2 class="anchored" data-anchor-id="analyse-du-nombre-dauteurs-par-article">Analyse du nombre d’auteurs par article</h2>
 <p>Un petits tiers sont des articles à auteurs multiples dont 20% en ont deux, au-delà c’est moins de 10%.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>PMP<span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/PMPLast3.csv"</span>, </span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">"WINDOWS-1252"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: One or more parsing issues, see `problems()` for details</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 1081 Columns: 87-- Column specification --------------------------------------------------------
-Delimiter: ","
-chr  (24): Key, Item Type, Author, Title, Publication Title, ISSN, DOI, Url,...
-dbl   (2): Publication Year, Volume
-lgl  (58): ISBN, Num Pages, Number Of Volumes, Series, Series Number, Series...
-dttm  (3): date2, date3, Access Date
-i Use `spec()` to retrieve the full column specification for this data.
-i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>dn<span class="ot">&lt;-</span>PMP <span class="sc">%&gt;%</span> <span class="fu">select</span>(Key, Author,<span class="st">`</span><span class="at">Publication Year</span><span class="st">`</span>,Title, <span class="st">`</span><span class="at">Abstract Note</span><span class="st">`</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">Year=</span><span class="st">`</span><span class="at">Publication Year</span><span class="st">`</span>)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co">#trouver une meilleure solution pour tokeniser les auteurs</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author,(<span class="st">"-"</span>),<span class="st">""</span>)</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,(<span class="st">",</span><span class="sc">\\</span><span class="st">s"</span>),<span class="st">"_"</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,(<span class="st">"</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">s*"</span>),<span class="st">"_"</span>)</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,<span class="st">";</span><span class="sc">\\</span><span class="st">s"</span>,<span class="st">"/"</span>) </span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,<span class="st">"</span><span class="sc">\\</span><span class="st">s"</span>,<span class="st">""</span>) </span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,<span class="st">"/"</span>,<span class="st">" "</span>) </span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>dn<span class="ot">&lt;-</span>dn <span class="sc">%&gt;%</span> </span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_words =</span> stringr<span class="sc">::</span><span class="fu">str_count</span>(Author1, <span class="st">' '</span>)<span class="sc">+</span><span class="dv">1</span>)</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dn, <span class="fu">aes</span>(<span class="at">x=</span>n_words))<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"firebrick"</span>)<span class="sc">+</span></span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'auteurs par article"</span>,<span class="at">x=</span><span class="st">"nombre d'auteurs par article"</span>,<span class="at">y=</span><span class="st">"nombre d'articles"</span>,<span class="at">caption=</span><span class="st">"corpus PMP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>PMP<span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/PMPLast3.csv"</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">"WINDOWS-1252"</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>dn<span class="ot">&lt;-</span>PMP <span class="sc">%&gt;%</span> <span class="fu">select</span>(Key, Author,<span class="st">`</span><span class="at">Publication Year</span><span class="st">`</span>,Title, <span class="st">`</span><span class="at">Abstract Note</span><span class="st">`</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">Year=</span><span class="st">`</span><span class="at">Publication Year</span><span class="st">`</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#trouver une meilleure solution pour tokeniser les auteurs</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author,(<span class="st">"-"</span>),<span class="st">""</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,(<span class="st">",</span><span class="sc">\\</span><span class="st">s"</span>),<span class="st">"_"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,(<span class="st">"</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">s*"</span>),<span class="st">"_"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,<span class="st">";</span><span class="sc">\\</span><span class="st">s"</span>,<span class="st">"/"</span>) </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,<span class="st">"</span><span class="sc">\\</span><span class="st">s"</span>,<span class="st">""</span>) </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>dn<span class="sc">$</span>Author1<span class="ot">&lt;-</span><span class="fu">str_replace_all</span>(dn<span class="sc">$</span>Author1,<span class="st">"/"</span>,<span class="st">" "</span>) </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>dn<span class="ot">&lt;-</span>dn <span class="sc">%&gt;%</span> </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_words =</span> stringr<span class="sc">::</span><span class="fu">str_count</span>(Author1, <span class="st">' '</span>)<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dn, <span class="fu">aes</span>(<span class="at">x=</span>n_words))<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"firebrick"</span>)<span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'auteurs par article"</span>,<span class="at">x=</span><span class="st">"nombre d'auteurs par article"</span>,<span class="at">y=</span><span class="st">"nombre d'articles"</span>,<span class="at">caption=</span><span class="st">"corpus PMP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth01-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>La tendance est clairement en faveur des auteurs multiples et le tournant semble être vers 2005.On passe de 1.3 à 2.0 Il faut comparer au nombre d’articles par an mais c’est assez peu important, IL y a un changement qui s’opère à partir de 2002; et clairement un changement de régime?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>dn_year<span class="ot">&lt;-</span>dn <span class="sc">%&gt;%</span> </span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_paper=</span><span class="fu">mean</span>(n_words))</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dn_year, <span class="fu">aes</span>(<span class="at">x=</span>Year,<span class="at">y=</span>n_paper))<span class="sc">+</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">span=</span><span class="fl">0.35</span>)<span class="sc">+</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">1</span>,<span class="fl">2.5</span>)<span class="sc">+</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Evolution du nombre d'auteurs par article"</span>,<span class="at">y=</span><span class="st">"nombre moyen d'auteurs par article"</span>,<span class="at">x=</span><span class="st">"Année de publication"</span>,<span class="at">caption=</span><span class="st">"corpus PMP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dn_year<span class="ot">&lt;-</span>dn <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_paper=</span><span class="fu">mean</span>(n_words))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dn_year, <span class="fu">aes</span>(<span class="at">x=</span>Year,<span class="at">y=</span>n_paper))<span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">span=</span><span class="fl">0.35</span>)<span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">1</span>,<span class="fl">2.5</span>)<span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Evolution du nombre d'auteurs par article"</span>,<span class="at">y=</span><span class="st">"nombre moyen d'auteurs par article"</span>,<span class="at">x=</span><span class="st">"Année de publication"</span>,<span class="at">caption=</span><span class="st">"corpus PMP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth02-1.png" class="img-fluid" width="864"></p>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/network0.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/network0.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>Le classement des auteurs par nombre de contributions. La figure de Patrick Gibert domine, mais elle n’écrase pas d’autres auteurs qui ont une contribution généreuse.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>corp <span class="ot">&lt;-</span> <span class="fu">corpus</span>(dn<span class="sc">$</span>Author1, <span class="at">docvars=</span>(dn))  <span class="co"># corps des auteurs</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>tok <span class="ot">&lt;-</span> <span class="fu">tokens</span>(corp, <span class="at">remove_punct =</span> <span class="cn">FALSE</span>, <span class="at">tolower =</span> <span class="cn">FALSE</span>,  <span class="at">include_docvars =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: tolower argument is not used.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span>tok <span class="sc">%&gt;%</span> </span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.list</span>()<span class="sc">%&gt;%</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="dv">1</span>)</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>authors<span class="sc">$</span>nom<span class="ot">&lt;-</span>authors[,<span class="dv">1</span>]</span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span> authors <span class="sc">%&gt;%</span> </span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(nom) <span class="sc">%&gt;%</span> </span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">sum</span>(n))<span class="sc">%&gt;%</span> </span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors<span class="sc">%&gt;%</span><span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">2</span>),<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(nom,n),<span class="at">y=</span>n))<span class="sc">+</span></span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill=</span><span class="st">"firebrick"</span>,<span class="at">stat=</span><span class="st">"identity"</span>)<span class="sc">+</span>  </span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
-<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'articles par auteur"</span>,</span>
-<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">"corpus PMP"</span>,<span class="at">x=</span><span class="st">"Auteurs"</span>,<span class="at">y=</span><span class="st">"nombre d'articles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>corp <span class="ot">&lt;-</span> <span class="fu">corpus</span>(dn<span class="sc">$</span>Author1, <span class="at">docvars=</span>(dn))  <span class="co"># corps des auteurs</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tok <span class="ot">&lt;-</span> <span class="fu">tokens</span>(corp, <span class="at">remove_punct =</span> <span class="cn">FALSE</span>, <span class="at">tolower =</span> <span class="cn">FALSE</span>,  <span class="at">include_docvars =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span>tok <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.list</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="dv">1</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>authors<span class="sc">$</span>nom<span class="ot">&lt;-</span>authors[,<span class="dv">1</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span> authors <span class="sc">%&gt;%</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(nom) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">sum</span>(n))<span class="sc">%&gt;%</span> </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors<span class="sc">%&gt;%</span><span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">2</span>),<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(nom,n),<span class="at">y=</span>n))<span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill=</span><span class="st">"firebrick"</span>,<span class="at">stat=</span><span class="st">"identity"</span>)<span class="sc">+</span>  </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'articles par auteur"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">"corpus PMP"</span>,<span class="at">x=</span><span class="st">"Auteurs"</span>,<span class="at">y=</span><span class="st">"nombre d'articles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth03-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pour qualification (discipline,titre,Institution)</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(authors, file="authors.csv")</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/author05.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pour qualification (discipline,titre,Institution)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(authors, file="authors.csv")</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/author05.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>Examinons de plus près la décomposition entre le nombre d’articles écrits seul et à plusieurs pour chacun des auteurs</p>
 <p>la corrélation est plutôt positive, plus on à écrit seul et plus on écrit avec les autres, sauf un déchoché pour ceux qui n’ont écrit une fois. Il y a corrélation inverse entre écrire une fois ensemble et une fois seul.</p>
 <p>Deux stratégies se dégagent , la médiane est occuppé par le principal animateur du champs.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>dfm_auth<span class="ot">&lt;-</span> <span class="fu">dfm</span>(tok)<span class="sc">%&gt;%</span>  <span class="fu">convert</span>(<span class="at">to=</span><span class="st">"data.frame"</span>)<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">document=</span>doc_id)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span><span class="fu">melt</span>(dfm_auth) <span class="sc">%&gt;%</span></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(document) <span class="sc">%&gt;%</span> </span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">sum</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Using document as id variables</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span><span class="fu">melt</span>(dfm_auth) <span class="sc">%&gt;%</span><span class="fu">left_join</span>(foo)<span class="sc">%&gt;%</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_seul=</span><span class="fu">ifelse</span>(value<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> n<span class="sc">==</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">n_plusieurs=</span><span class="fu">ifelse</span>(value<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> n<span class="sc">&gt;</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span> </span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_seul=</span><span class="fu">sum</span>(n_seul), <span class="at">n_plusieurs=</span><span class="fu">sum</span>(n_plusieurs), <span class="at">n=</span>n_seul<span class="sc">+</span>n_plusieurs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Using document as id variables</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Joining with `by = join_by(document)`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (foo, <span class="fu">aes</span>(<span class="at">x=</span>n_seul,<span class="at">y=</span>n_plusieurs))<span class="sc">+</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size=</span>n),<span class="at">color=</span><span class="st">"coral3"</span>)<span class="sc">+</span></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>)<span class="sc">+</span></span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Le nombre d'articles signés seul et à plusieurs"</span>, <span class="at">x=</span><span class="st">"articles signés seul"</span>, <span class="at">y=</span><span class="st">"articles signés à plusieurs"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : pseudoinverse used at -0.055</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : neighborhood radius 1.055</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : reciprocal condition number 0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : There are other near singularities as well. 1</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : pseudoinverse used at
--0.055</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : neighborhood radius
-1.055</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : reciprocal condition
-number 0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : There are other near
-singularities as well. 1</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dfm_auth<span class="ot">&lt;-</span> <span class="fu">dfm</span>(tok)<span class="sc">%&gt;%</span>  <span class="fu">convert</span>(<span class="at">to=</span><span class="st">"data.frame"</span>)<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">document=</span>doc_id)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span><span class="fu">melt</span>(dfm_auth) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(document) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">sum</span>(value))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span><span class="fu">melt</span>(dfm_auth) <span class="sc">%&gt;%</span><span class="fu">left_join</span>(foo)<span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_seul=</span><span class="fu">ifelse</span>(value<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> n<span class="sc">==</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">n_plusieurs=</span><span class="fu">ifelse</span>(value<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> n<span class="sc">&gt;</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_seul=</span><span class="fu">sum</span>(n_seul), <span class="at">n_plusieurs=</span><span class="fu">sum</span>(n_plusieurs), <span class="at">n=</span>n_seul<span class="sc">+</span>n_plusieurs)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (foo, <span class="fu">aes</span>(<span class="at">x=</span>n_seul,<span class="at">y=</span>n_plusieurs))<span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size=</span>n),<span class="at">color=</span><span class="st">"coral3"</span>)<span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>)<span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Le nombre d'articles signés seul et à plusieurs"</span>, <span class="at">x=</span><span class="st">"articles signés seul"</span>, <span class="at">y=</span><span class="st">"articles signés à plusieurs"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth03b-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -480,67 +286,74 @@ singularities as well. 1</code></pre>
 <p>Un gini très faible et une trés grande égalité, il n’y a pas pas d’accaparrement de la parole par un ou plusieurs réseaux. Au contraire plusieurs réseaux qui se constituent au cours du temps.</p>
 <p>Le coeurs ce sont les 25% des auteurs qui ont publiés plusieurs fois et constituent 40% du corpus. Iles forment une masse primaire à laquelle s’aggrège une grande diversité de contribrution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ineq) <span class="co">#pour le gini</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gglorenz) <span class="co">#courbe de concentration</span></span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>gini<span class="ot">&lt;-</span><span class="fu">round</span>(<span class="fu">ineq</span>(authors<span class="sc">$</span>n,<span class="at">type =</span> <span class="fu">c</span>(<span class="st">"Gini"</span>)),<span class="dv">2</span>)</span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>gini</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ineq) <span class="co">#pour le gini</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gglorenz) <span class="co">#courbe de concentration</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>gini<span class="ot">&lt;-</span><span class="fu">round</span>(<span class="fu">ineq</span>(authors<span class="sc">$</span>n,<span class="at">type =</span> <span class="fu">c</span>(<span class="st">"Gini"</span>)),<span class="dv">2</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>gini</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.24</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>g05b<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span></span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(n)) <span class="sc">+</span></span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_lorenz</span>(<span class="at">desc =</span> <span class="cn">TRUE</span>,<span class="at">size=</span><span class="fl">1.2</span>,<span class="at">color=</span><span class="st">"darkred"</span>) <span class="sc">+</span></span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Part cumulée des auteurs"</span>,</span>
-<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Part cumulée des articles"</span>,</span>
-<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Concentration des contributions"</span>,</span>
-<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"corpus PMP"</span>) <span class="co">#+ annotate("text", x=.35, y=.6, size=2,label= paste0("indice de Gini=", gini))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-
-Warning: Please use `linewidth` instead.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>g05b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>g05b<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(n)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_lorenz</span>(<span class="at">desc =</span> <span class="cn">TRUE</span>,<span class="at">size=</span><span class="fl">1.2</span>,<span class="at">color=</span><span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Part cumulée des auteurs"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Part cumulée des articles"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Concentration des contributions"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"corpus PMP"</span>) <span class="co">#+ annotate("text", x=.35, y=.6, size=2,label= paste0("indice de Gini=", gini))</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>g05b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/author06.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/author06.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="le-réseaux-des-co-auteurs" class="level3">
 <h3 class="anchored" data-anchor-id="le-réseaux-des-co-auteurs">Le réseaux des co-auteurs</h3>
 <p>Une part importante n’a écrit que des articles uniques, une part d’entre eux l’ayant écrit avec un co-auteur, on va réduire l’analyse aux auteurs ayant écrit au moins un article avec un autres auteurs</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>tok_auth<span class="ot">&lt;-</span>dn <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Year<span class="sc">&lt;</span><span class="dv">2004</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(Author1, Author1)</span>
-<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>foo1<span class="ot">&lt;-</span> foo <span class="sc">%&gt;%</span> </span>
-<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Author1=</span>variable) <span class="sc">%&gt;%</span> </span>
-<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_plusieurs<span class="sc">&gt;</span><span class="dv">0</span>)</span>
-<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a>foo1<span class="sc">$</span>variable<span class="ot">&lt;-</span><span class="fu">as.character</span>(foo1<span class="sc">$</span>variable)</span>
-<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a>dfm_shor<span class="ot">&lt;-</span> tok_auth<span class="sc">%&gt;%</span> </span>
-<span id="cb75-13"><a href="#cb75-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(foo1,<span class="at">by=</span><span class="st">"Author1"</span>)<span class="sc">%&gt;%</span> </span>
-<span id="cb75-14"><a href="#cb75-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value=</span><span class="dv">1</span>)</span>
-<span id="cb75-15"><a href="#cb75-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-16"><a href="#cb75-16" aria-hidden="true" tabindex="-1"></a>dfm_short<span class="ot">&lt;-</span>dfm_shor <span class="sc">%&gt;%</span> </span>
-<span id="cb75-17"><a href="#cb75-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dcast</span>(Key <span class="sc">~</span> variable,<span class="at">value.var=</span><span class="fu">c</span>(<span class="st">"value"</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb75-18"><a href="#cb75-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Key)</span>
-<span id="cb75-19"><a href="#cb75-19" aria-hidden="true" tabindex="-1"></a>dfm_short[<span class="fu">is.na</span>(dfm_short)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb75-20"><a href="#cb75-20" aria-hidden="true" tabindex="-1"></a>dfm_short<span class="ot">&lt;-</span><span class="fu">as.matrix</span>(dfm_short)</span>
-<span id="cb75-21"><a href="#cb75-21" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">t</span>(dfm_short) <span class="sc">%*%</span> (dfm_short)                                   <span class="co">#the magic matrix </span></span>
-<span id="cb75-22"><a href="#cb75-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-23"><a href="#cb75-23" aria-hidden="true" tabindex="-1"></a><span class="co">#le graphe</span></span>
-<span id="cb75-24"><a href="#cb75-24" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">graph_from_adjacency_matrix</span>(v, <span class="at">mode=</span><span class="st">"undirected"</span>,<span class="at">weighted=</span><span class="cn">TRUE</span>,<span class="at">diag=</span><span class="cn">FALSE</span>)</span>
-<span id="cb75-25"><a href="#cb75-25" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>tok_auth<span class="ot">&lt;-</span>dn <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Year<span class="sc">&lt;</span><span class="dv">2004</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(Author1, Author1)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>foo1<span class="ot">&lt;-</span> foo <span class="sc">%&gt;%</span> </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Author1=</span>variable) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_plusieurs<span class="sc">&gt;</span><span class="dv">0</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>foo1<span class="sc">$</span>variable<span class="ot">&lt;-</span><span class="fu">as.character</span>(foo1<span class="sc">$</span>variable)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>dfm_shor<span class="ot">&lt;-</span> tok_auth<span class="sc">%&gt;%</span> </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(foo1,<span class="at">by=</span><span class="st">"Author1"</span>)<span class="sc">%&gt;%</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value=</span><span class="dv">1</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>dfm_short<span class="ot">&lt;-</span>dfm_shor <span class="sc">%&gt;%</span> </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dcast</span>(Key <span class="sc">~</span> variable,<span class="at">value.var=</span><span class="fu">c</span>(<span class="st">"value"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Key)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>dfm_short[<span class="fu">is.na</span>(dfm_short)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>dfm_short<span class="ot">&lt;-</span><span class="fu">as.matrix</span>(dfm_short)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">t</span>(dfm_short) <span class="sc">%*%</span> (dfm_short)                                   <span class="co">#the magic matrix </span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co">#le graphe</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">graph_from_adjacency_matrix</span>(v, <span class="at">mode=</span><span class="st">"undirected"</span>,<span class="at">weighted=</span><span class="cn">TRUE</span>,<span class="at">diag=</span><span class="cn">FALSE</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH e5ddb6d UNW- 308 207 -- 
+<pre><code>IGRAPH b9860e1 UNW- 308 207 -- 
 + attr: name (v/c), weight (e/n)
-+ edges from e5ddb6d (vertex names):
++ edges from b9860e1 (vertex names):
  [1] aggeri_franck             --pallez_frédérique       
  [2] alvarez_ruben             --echevin_claude          
  [3] anastassopoulos_jeanpierre--blanc_georges           
@@ -551,36 +364,39 @@ Warning: Please use `linewidth` instead.</code></pre>
  [8] balme_richard             --jouve_bernard           
 + ... omitted several edges</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>clu <span class="ot">&lt;-</span> <span class="fu">components</span>(g1)</span>
-<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>g<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(clu[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span></span>
-<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">composant=</span><span class="st">`</span><span class="at">clu[[1]]</span><span class="st">`</span>)</span>
-<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>variable<span class="ot">&lt;-</span><span class="fu">rownames</span>(g)</span>
-<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>g_n<span class="ot">&lt;-</span>g <span class="sc">%&gt;%</span> </span>
-<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(composant)<span class="sc">%&gt;%</span> </span>
-<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">membres=</span><span class="fu">sum</span>(n), <span class="at">noms=</span> <span class="fu">paste</span>(<span class="fu">substr</span>(variable,<span class="dv">1</span>,<span class="dv">15</span>), <span class="at">collapse =</span><span class="st">",</span><span class="sc">\n</span><span class="st">"</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nom=</span><span class="fu">substr</span>(noms,<span class="dv">1</span>,<span class="dv">90</span>))</span>
-<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a>         </span>
-<span id="cb77-12"><a href="#cb77-12" aria-hidden="true" tabindex="-1"></a>authors_short<span class="ot">&lt;-</span>foo1 <span class="sc">%&gt;%</span></span>
-<span id="cb77-13"><a href="#cb77-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(g) <span class="sc">%&gt;%</span> </span>
-<span id="cb77-14"><a href="#cb77-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(g_n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Joining with `by = join_by(variable)`Joining with `by = join_by(composant)`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggwordcloud)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggwordcloud' was built under R version 4.0.5</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors_short <span class="sc">%&gt;%</span><span class="fu">filter</span>(membres<span class="sc">&gt;</span><span class="dv">5</span>))<span class="sc">+</span></span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_wordcloud</span>(<span class="fu">aes</span>(<span class="at">label=</span>variable, <span class="at">size=</span>n, <span class="at">color=</span>n_plusieurs<span class="sc">/</span>n))<span class="sc">+</span> </span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(composant))<span class="sc">+</span> <span class="fu">scale_color_gradient</span>(<span class="at">low=</span><span class="st">"grey90"</span>,<span class="at">high=</span><span class="st">"darkblue"</span>)<span class="sc">+</span></span>
-<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">" Principaux composants du réseaux de co écriture ( &gt;5 membres)"</span>,</span>
-<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"la taille est proportionnelle aux nombres de publications,</span><span class="sc">\n</span><span class="st">l'intensité de la couleur à la part des co-écritures"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>clu <span class="ot">&lt;-</span> <span class="fu">components</span>(g1)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>g<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(clu[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">composant=</span><span class="st">`</span><span class="at">clu[[1]]</span><span class="st">`</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>variable<span class="ot">&lt;-</span><span class="fu">rownames</span>(g)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>g_n<span class="ot">&lt;-</span>g <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(composant)<span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">membres=</span><span class="fu">sum</span>(n), <span class="at">noms=</span> <span class="fu">paste</span>(<span class="fu">substr</span>(variable,<span class="dv">1</span>,<span class="dv">15</span>), <span class="at">collapse =</span><span class="st">",</span><span class="sc">\n</span><span class="st">"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nom=</span><span class="fu">substr</span>(noms,<span class="dv">1</span>,<span class="dv">90</span>))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>authors_short<span class="ot">&lt;-</span>foo1 <span class="sc">%&gt;%</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(g) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(g_n)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggwordcloud)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors_short <span class="sc">%&gt;%</span><span class="fu">filter</span>(membres<span class="sc">&gt;</span><span class="dv">5</span>))<span class="sc">+</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_wordcloud</span>(<span class="fu">aes</span>(<span class="at">label=</span>variable, <span class="at">size=</span>n, <span class="at">color=</span>n_plusieurs<span class="sc">/</span>n))<span class="sc">+</span> </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(composant))<span class="sc">+</span> <span class="fu">scale_color_gradient</span>(<span class="at">low=</span><span class="st">"grey90"</span>,<span class="at">high=</span><span class="st">"darkblue"</span>)<span class="sc">+</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">" Principaux composants du réseaux de co écriture ( &gt;5 membres)"</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"la taille est proportionnelle aux nombres de publications,</span><span class="sc">\n</span><span class="st">l'intensité de la couleur à la part des co-écritures"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04b-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/authorClique_b2003.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/authorClique_b2003.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>On calcule deux éléments : d’abord l’appartenance à des communautés, ensuite la centalité des acteurs.</p>
 <p>Une détection des communautés par un algo fast_greedy est réalisée au préalable. Elle est identifier 215 communautés ce qui est élevé si l’on prend en compte le nombre d’institutions, à moins que la correspondances des cliques et des instituions soit finalement ténue. C’est une relation à explorer et à tester.</p>
@@ -588,97 +404,60 @@ Warning: Please use `linewidth` instead.</code></pre>
 <p>Le chaînage le plus long réunit 31 individus. Ils sont en mode de 2. Le réseaux de co-auteurs est une collections de hardes isolées les unes des autres, c’est aussi le fait d’une collectivité petite qui ne peut développer toutes les ramifications de ses réseaux. La taille est aussi un terreau.</p>
 <p>Une clique d’un graphe non orienté est, en théorie des graphes, un sous-ensemble des sommets de ce graphe dont le sous-graphe induit est complet, c’est-à-dire que deux sommets quelconques de la clique sont toujours adjacents.Ici on utilise une autre notion ( rechercher de meilleures définitions)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> <span class="fu">cluster_fast_greedy</span>(g1)</span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">modularity_matrix</span>(g1, <span class="fu">membership</span>(c1))</span>
-<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="co">#round(B[1,],2)</span></span>
-<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>c1<span class="sc">$</span>vcount</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> <span class="fu">cluster_fast_greedy</span>(g1)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">modularity_matrix</span>(g1, <span class="fu">membership</span>(c1))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#round(B[1,],2)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>c1<span class="sc">$</span>vcount</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(c1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(c1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 136</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>sizes<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">sizes</span>(c1))</span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sizes,<span class="fu">aes</span>(<span class="at">x=</span>Freq))<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"chartreuse4"</span>)<span class="sc">+</span><span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'auteurs par communauté"</span>,<span class="at">x=</span><span class="st">"Taille de la communauté"</span>,<span class="at">y=</span><span class="st">"Effectif"</span>, <span class="at">caption=</span><span class="st">"corpus PMP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sizes<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">sizes</span>(c1))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sizes,<span class="fu">aes</span>(<span class="at">x=</span>Freq))<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"chartreuse4"</span>)<span class="sc">+</span><span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'auteurs par communauté"</span>,<span class="at">x=</span><span class="st">"Taille de la communauté"</span>,<span class="at">y=</span><span class="st">"Effectif"</span>, <span class="at">caption=</span><span class="st">"corpus PMP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04c-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>membership<span class="ot">&lt;-</span><span class="fu">membership</span>(c1)</span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="co">#crossing(c1, g1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>membership<span class="ot">&lt;-</span><span class="fu">membership</span>(c1)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#crossing(c1, g1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>On calcule tant qu’à faire la centralité des nœuds et de suite on va la chercher à l’expliquer</p>
 <p>la centralité est liée en échelle au nombre de publication, mais la corrélation est lâche. Un modèle lm loglog montre qu’évidemment écrire seul ne contribue pas à la centralité. et que la centralité dépend du nombre de co-authorship mais aussi de la taille du réseau : plus les auteurs du réseau d’un auteurs s’associent et plus il bénéficie de l’effet de centralité. le r2 est substantiel, les p très faibles.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mesure de centralité</span></span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>between<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">betweenness</span>(g1))<span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">between=</span><span class="st">`</span><span class="at">betweenness(g1)</span><span class="st">`</span>)</span>
-<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>between<span class="sc">$</span>variable<span class="ot">&lt;-</span><span class="fu">rownames</span>(between)</span>
-<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>authors_short<span class="ot">&lt;-</span>authors_short <span class="sc">%&gt;%</span></span>
-<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(between)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Joining with `by = join_by(variable)`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors_short,<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">log</span>(n), <span class="at">y=</span><span class="fu">log</span>(between<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="fu">geom_point</span>()<span class="sc">+</span><span class="fu">geom_smooth</span>()<span class="sc">+</span><span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess' and formula = 'y ~ x'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 404 rows containing non-finite values (`stat_smooth()`).</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : pseudoinverse used at -0.014722</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : neighborhood radius 0.70787</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : reciprocal condition number 1.0984e-030</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : There are other near singularities as well. 0.48045</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : pseudoinverse used at
--0.014722</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : neighborhood radius
-0.70787</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : reciprocal condition
-number 1.0984e-030</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predLoess(object$y, object$x, newx = if
-(is.null(newdata)) object$x else if (is.data.frame(newdata))
-as.matrix(model.frame(delete.response(terms(object)), : There are other near
-singularities as well. 0.48045</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 404 rows containing missing values (`geom_point()`).</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mesure de centralité</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>between<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">betweenness</span>(g1))<span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">between=</span><span class="st">`</span><span class="at">betweenness(g1)</span><span class="st">`</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>between<span class="sc">$</span>variable<span class="ot">&lt;-</span><span class="fu">rownames</span>(between)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>authors_short<span class="ot">&lt;-</span>authors_short <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(between)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors_short,<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">log</span>(n), <span class="at">y=</span><span class="fu">log</span>(between<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="fu">geom_point</span>()<span class="sc">+</span><span class="fu">geom_smooth</span>()<span class="sc">+</span><span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04d-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>fit<span class="ot">&lt;-</span><span class="fu">lm</span>(<span class="fu">log</span>(between<span class="sc">+</span><span class="dv">1</span>)<span class="sc">~</span><span class="fu">log</span>(n_plusieurs<span class="sc">+</span><span class="dv">1</span>)<span class="sc">+</span><span class="fu">log</span>(n_seul<span class="sc">+</span><span class="dv">1</span>)<span class="sc">+</span><span class="fu">log</span>(n<span class="sc">+</span><span class="dv">1</span>)<span class="sc">+</span><span class="fu">log</span>(membres<span class="sc">+</span><span class="dv">1</span>),<span class="at">data=</span>authors_short)</span>
-<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fit<span class="ot">&lt;-</span><span class="fu">lm</span>(<span class="fu">log</span>(between<span class="sc">+</span><span class="dv">1</span>)<span class="sc">~</span><span class="fu">log</span>(n_plusieurs<span class="sc">+</span><span class="dv">1</span>)<span class="sc">+</span><span class="fu">log</span>(n_seul<span class="sc">+</span><span class="dv">1</span>)<span class="sc">+</span><span class="fu">log</span>(n<span class="sc">+</span><span class="dv">1</span>)<span class="sc">+</span><span class="fu">log</span>(membres<span class="sc">+</span><span class="dv">1</span>),<span class="at">data=</span>authors_short)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -719,45 +498,35 @@ F-statistic: 77.98 on 4 and 302 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>trois types d’acteurs * des auteurs occasionnels * des auteurs fidèles * des auteurs organisés</p>
 <p>ifelse(membership(c1)==1,“lightsalmon”, ifelse(membership(c1)==2,“lightgoldenrod1”, ifelse(membership(c1)==3,“lightcyan2”, ifelse(membership(c1)==6,“palegreen1”, ifelse(membership(c1)==7,“lightsalmon3”, ifelse(membership(c1)==4,“lightgoldenrod4”, ifelse(membership(c1)==8,“lightcyan4”, ifelse(membership(c1)==9,“palegreen3”, ifelse(membership(c1)==10,“orchid1”,“grey90”)))))))))</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1984</span>)</span>
-<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">layout_with_fr</span>(g1)</span>
-<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(authors_short<span class="sc">$</span>n<span class="sc">&gt;</span><span class="dv">2</span>,authors_short<span class="sc">$</span>variable,<span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in vattrs[[name]][index] &lt;- value: le nombre d'objets à remplacer n'est
-pas multiple de la taille du remplacement</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>label.color <span class="ot">&lt;-</span> <span class="st">"grey12"</span></span>
-<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>label.cex <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">+</span>authors_short<span class="sc">$</span>n<span class="sc">*</span><span class="fl">0.02</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in vattrs[[name]][index] &lt;- value: le nombre d'objets à remplacer n'est
-pas multiple de la taille du remplacement</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>size <span class="ot">&lt;-</span> authors_short<span class="sc">$</span>n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in vattrs[[name]][index] &lt;- value: le nombre d'objets à remplacer n'est
-pas multiple de la taille du remplacement</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>color <span class="ot">&lt;-</span> authors_short<span class="sc">$</span>composant</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in vattrs[[name]][index] &lt;- value: le nombre d'objets à remplacer n'est
-pas multiple de la taille du remplacement</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g1)<span class="sc">$</span>width <span class="ot">&lt;-</span> <span class="fu">E</span>(g1)<span class="sc">$</span>weight<span class="sc">*</span><span class="fl">2.5</span></span>
-<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g1)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="st">"grey70"</span></span>
-<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"./images/my_plotb2023.png"</span>, <span class="dv">1000</span>, <span class="dv">1000</span>)</span>
-<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g1,<span class="at">layout=</span>l,<span class="at">curved=</span><span class="cn">TRUE</span>,<span class="at">vertex.label.family=</span><span class="st">"Arial"</span>,<span class="at">label.dist=</span><span class="dv">1</span>)</span>
-<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Les constellations des auteurs de PMP"</span>,</span>
-<span id="cb114-9"><a href="#cb114-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">sub =</span><span class="st">"Sélection des auteurs ayant publié au moins une fois à plusieurs :</span><span class="sc">\n</span><span class="st">  taille label  = nombre d'articles publiés </span><span class="sc">\n</span><span class="st"> couleur : communautés les plus nombreuses"</span>, <span class="at">cex.main=</span><span class="fl">1.5</span>,<span class="at">col.main=</span><span class="st">"black"</span>)</span>
-<span id="cb114-10"><a href="#cb114-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-11"><a href="#cb114-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-12"><a href="#cb114-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-13"><a href="#cb114-13" aria-hidden="true" tabindex="-1"></a><span class="co">#library(ggnetwork)</span></span>
-<span id="cb114-14"><a href="#cb114-14" aria-hidden="true" tabindex="-1"></a><span class="co">#ggnetwork(g1, layout = l, cell.jitter = 0.75)</span></span>
-<span id="cb114-15"><a href="#cb114-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-16"><a href="#cb114-16" aria-hidden="true" tabindex="-1"></a><span class="co">#ggsave("./images/nt_auth.jpeg", width = 27, height = 18, units = "cm")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1984</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">layout_with_fr</span>(g1)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(authors_short<span class="sc">$</span>n<span class="sc">&gt;</span><span class="dv">2</span>,authors_short<span class="sc">$</span>variable,<span class="cn">NA</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>label.color <span class="ot">&lt;-</span> <span class="st">"grey12"</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>label.cex <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">+</span>authors_short<span class="sc">$</span>n<span class="sc">*</span><span class="fl">0.02</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>size <span class="ot">&lt;-</span> authors_short<span class="sc">$</span>n</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g1)<span class="sc">$</span>color <span class="ot">&lt;-</span> authors_short<span class="sc">$</span>composant</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g1)<span class="sc">$</span>width <span class="ot">&lt;-</span> <span class="fu">E</span>(g1)<span class="sc">$</span>weight<span class="sc">*</span><span class="fl">2.5</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g1)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="st">"grey70"</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"./images/my_plotb2023.png"</span>, <span class="dv">1000</span>, <span class="dv">1000</span>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g1,<span class="at">layout=</span>l,<span class="at">curved=</span><span class="cn">TRUE</span>,<span class="at">vertex.label.family=</span><span class="st">"Arial"</span>,<span class="at">label.dist=</span><span class="dv">1</span>)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Les constellations des auteurs de PMP"</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">sub =</span><span class="st">"Sélection des auteurs ayant publié au moins une fois à plusieurs :</span><span class="sc">\n</span><span class="st">  taille label  = nombre d'articles publiés </span><span class="sc">\n</span><span class="st"> couleur : communautés les plus nombreuses"</span>, <span class="at">cex.main=</span><span class="fl">1.5</span>,<span class="at">col.main=</span><span class="st">"black"</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="co">#library(ggnetwork)</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="co">#ggnetwork(g1, layout = l, cell.jitter = 0.75)</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="co">#ggsave("./images/nt_auth.jpeg", width = 27, height = 18, units = "cm")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 </section>
@@ -773,76 +542,83 @@ pas multiple de la taille du remplacement</code></pre>
 <p>la limite, on ne regarde que le labeur pas les héritages. ce sera une autre histoire par le collège invisible des citations.</p>
 <p>reste à mieux explorer la dynamique des entrants, sortants, et répétéurs?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>corp <span class="ot">&lt;-</span> <span class="fu">corpus</span>(dn<span class="sc">$</span>Author1, <span class="at">docvars=</span>(dn))  <span class="co"># corps des auteueut</span></span>
-<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>tok <span class="ot">&lt;-</span> <span class="fu">tokens</span>(corp, <span class="at">remove_punct =</span> <span class="cn">FALSE</span>, <span class="at">tolower =</span> <span class="cn">FALSE</span>,  <span class="at">include_docvars =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: tolower argument is not used.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span>tok <span class="sc">%&gt;%</span> <span class="fu">as.list</span>()<span class="sc">%&gt;%</span> <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="dv">1</span>)</span>
-<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a>authors<span class="sc">$</span>nom<span class="ot">&lt;-</span>authors[,<span class="dv">1</span>]</span>
-<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span> authors <span class="sc">%&gt;%</span> </span>
-<span id="cb117-8"><a href="#cb117-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(nom) <span class="sc">%&gt;%</span> </span>
-<span id="cb117-9"><a href="#cb117-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">sum</span>(n))<span class="sc">%&gt;%</span> </span>
-<span id="cb117-10"><a href="#cb117-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
-<span id="cb117-11"><a href="#cb117-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-12"><a href="#cb117-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors<span class="sc">%&gt;%</span><span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">3</span>),<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(nom,n),<span class="at">y=</span>n))<span class="sc">+</span></span>
-<span id="cb117-13"><a href="#cb117-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill=</span><span class="st">"firebrick"</span>,<span class="at">stat=</span><span class="st">"identity"</span>)<span class="sc">+</span>  </span>
-<span id="cb117-14"><a href="#cb117-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span><span class="fu">coord_flip</span>()<span class="sc">+</span></span>
-<span id="cb117-15"><a href="#cb117-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'articles par auteur"</span>,</span>
-<span id="cb117-16"><a href="#cb117-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">"corpus PMP"</span>,</span>
-<span id="cb117-17"><a href="#cb117-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">"Auteurs"</span>,</span>
-<span id="cb117-18"><a href="#cb117-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"nombre d'articles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>corp <span class="ot">&lt;-</span> <span class="fu">corpus</span>(dn<span class="sc">$</span>Author1, <span class="at">docvars=</span>(dn))  <span class="co"># corps des auteueut</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>tok <span class="ot">&lt;-</span> <span class="fu">tokens</span>(corp, <span class="at">remove_punct =</span> <span class="cn">FALSE</span>, <span class="at">tolower =</span> <span class="cn">FALSE</span>,  <span class="at">include_docvars =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span>tok <span class="sc">%&gt;%</span> <span class="fu">as.list</span>()<span class="sc">%&gt;%</span> <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="dv">1</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>authors<span class="sc">$</span>nom<span class="ot">&lt;-</span>authors[,<span class="dv">1</span>]</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span> authors <span class="sc">%&gt;%</span> </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(nom) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">sum</span>(n))<span class="sc">%&gt;%</span> </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(authors<span class="sc">%&gt;%</span><span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">3</span>),<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(nom,n),<span class="at">y=</span>n))<span class="sc">+</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill=</span><span class="st">"firebrick"</span>,<span class="at">stat=</span><span class="st">"identity"</span>)<span class="sc">+</span>  </span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span><span class="fu">coord_flip</span>()<span class="sc">+</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Distribution du nombre d'articles par auteur"</span>,</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">"corpus PMP"</span>,</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">"Auteurs"</span>,</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"nombre d'articles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04f-1.png" class="img-fluid" width="1152"></p>
 </div>
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/source0.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span>
-<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="co">#pour qualification (discipline,titre,Institution)</span></span>
-<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(authors, file="authors.csv")</span></span>
-<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a>PMPAuthors <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/PMPAuthors.xlsx"</span>) <span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">m=</span>n)</span>
-<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span> </span>
-<span id="cb118-9"><a href="#cb118-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(PMPAuthors,<span class="at">by=</span><span class="st">"nom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in left_join(., PMPAuthors, by = "nom"): Each row in `x` is expected to
-match at most 1 row in `y`.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span> </span>
-<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(nom,n,Discipline1, Discipline2) <span class="sc">%&gt;%</span></span>
-<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(nom,n), <span class="at">names_to =</span> <span class="st">"Discipline"</span>, <span class="at">values_to=</span><span class="st">"value"</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(value)<span class="sc">%&gt;%</span> </span>
-<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>())<span class="sc">%&gt;%</span></span>
-<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">5</span>)</span>
-<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-9"><a href="#cb120-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(foo, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(value, n), <span class="at">y=</span>n))<span class="sc">+</span></span>
-<span id="cb120-10"><a href="#cb120-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>,<span class="at">fill=</span><span class="st">"firebrick"</span>)<span class="sc">+</span></span>
-<span id="cb120-11"><a href="#cb120-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
-<span id="cb120-12"><a href="#cb120-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">"Distribution des contributions des auteurs"</span>,</span>
-<span id="cb120-13"><a href="#cb120-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="st">"Fréquence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/source0.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#pour qualification (discipline,titre,Institution)</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(authors, file="authors.csv")</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>PMPAuthors <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/PMPAuthors.xlsx"</span>) <span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">m=</span>n)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>authors<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span> </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(PMPAuthors,<span class="at">by=</span><span class="st">"nom"</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span> </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(nom,n,Discipline1, Discipline2) <span class="sc">%&gt;%</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(nom,n), <span class="at">names_to =</span> <span class="st">"Discipline"</span>, <span class="at">values_to=</span><span class="st">"value"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(value)<span class="sc">%&gt;%</span> </span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>())<span class="sc">%&gt;%</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">5</span>)</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(foo, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(value, n), <span class="at">y=</span>n))<span class="sc">+</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>,<span class="at">fill=</span><span class="st">"firebrick"</span>)<span class="sc">+</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">"Distribution des contributions des auteurs"</span>,</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="st">"Fréquence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04f-2.png" class="img-fluid" width="1152"></p>
 </div>
-<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/source1.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span>
-<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Origine=</span><span class="fu">tolower</span>(Origine))<span class="sc">%&gt;%</span></span>
-<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Origine)<span class="sc">%&gt;%</span> </span>
-<span id="cb121-5"><a href="#cb121-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m=</span><span class="fu">n</span>())<span class="sc">%&gt;%</span><span class="fu">filter</span>(m<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span> m<span class="sc">&lt;</span><span class="dv">100</span> )</span>
-<span id="cb121-6"><a href="#cb121-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb121-7"><a href="#cb121-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(foo, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Origine, m), <span class="at">y=</span>m))<span class="sc">+</span></span>
-<span id="cb121-8"><a href="#cb121-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">fill=</span><span class="st">"firebrick"</span>)<span class="sc">+</span></span>
-<span id="cb121-9"><a href="#cb121-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
-<span id="cb121-10"><a href="#cb121-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">" Distribution des disciplines des auteurs"</span>,</span>
-<span id="cb121-11"><a href="#cb121-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="st">"Fréquence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/source1.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>foo<span class="ot">&lt;-</span>authors <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Origine=</span><span class="fu">tolower</span>(Origine))<span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Origine)<span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m=</span><span class="fu">n</span>())<span class="sc">%&gt;%</span><span class="fu">filter</span>(m<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span> m<span class="sc">&lt;</span><span class="dv">100</span> )</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(foo, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Origine, m), <span class="at">y=</span>m))<span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">fill=</span><span class="st">"firebrick"</span>)<span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">" Distribution des disciplines des auteurs"</span>,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="st">"Fréquence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="script2023_05_network_files/figure-html/auth04f-3.png" class="img-fluid" width="1152"></p>
 </div>
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/source2.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./images/source2.jpeg"</span>, <span class="at">width =</span> <span class="dv">27</span>, <span class="at">height =</span> <span class="dv">18</span>, <span class="at">units =</span> <span class="st">"cm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 

@@ -1,10 +1,19 @@
 ---
-title: "network"
-author: "CB"
-format: html
+title: "PMP 40ans : une analyse textuelle de la production"
+author: "CB MB SB"
+format:
+  html:
+    mermaid:
+      theme: forest
+subtitle: "Analyse de réseau" 
+title-block-banner: blue
+date: today
+execute : 
+  message: false
+  warning: false
+code-fold: true
 editor: visual
 ---
-
 
 ```{r 00}
 
@@ -32,9 +41,9 @@ library('extrafont') #c'est pour igraph
 
 ```
 
-Le projet est simple : ingérer près de 40 ans de production de la revue PMP, pour en retracer les évolutions principales en terme d'autorialité et de contenu thématique. 
+Le projet est simple : ingérer près de 40 ans de production de la revue PMP, pour en retracer les évolutions principales en terme d'autorialité et de contenu thématique.
 
-C'est une démarche de lecture automatique et algorithmique qui vise à retracer la vie d'un processus de production éditoriale et d'une communauté intellectuelle. La communauté intellectuelle est initiée par les acteurs de la revue : comités, rédacteurs. Le processus de production dépend largement du régime de régulation de la communauté universitaire dont on sait qu'il est transformé conjointement par l'appétit des groupes éditoriaux, par l'"impératif politique de la divulgation d'indicateurs de performances, de l'évolution des technologie éditoriales, des modes de financements et de critères d'avancement des carrières. 
+C'est une démarche de lecture automatique et algorithmique qui vise à retracer la vie d'un processus de production éditoriale et d'une communauté intellectuelle. La communauté intellectuelle est initiée par les acteurs de la revue : comités, rédacteurs. Le processus de production dépend largement du régime de régulation de la communauté universitaire dont on sait qu'il est transformé conjointement par l'appétit des groupes éditoriaux, par l'"impératif politique de la divulgation d'indicateurs de performances, de l'évolution des technologie éditoriales, des modes de financements et de critères d'avancement des carrières.
 
 Le contexte est une évolution d'un modèle vocationnel vers un modèles professionnel, pour reprendre une thématique weberienne dont nous ne développerons pas ici les conséquences. C'est une question vive dans les questions du nursing, elle touche un peu l'éducation
 
@@ -42,10 +51,9 @@ Dans ce document on retrace les calculs, mais leur production sera guidée par d
 
 La grille d'analyse est sans doute celle d'une sociologie des professions avec l'hypothèse de la mutation du métier d'universitaire ou d'enseignants chercheurs passant d'un modèle vocationnel à un modèle professionnel. Transformation largement étudié chez les infirmières qui vivent au plus plus au point cet antagonisme de la mission, qui se paye de fierté, et le l'engagement quotidien qui relève de la profession. On est pas héros tout les jours, et les jours sans héroïsme, la raison se fait ailleurs
 
-
 https://www.sgdl.org/sgdl-accueil/presse/presse-acte-des-forums/le-statut-social-des-auteurs-de-l-ecrit/1141-ecrire-entre-profession-et-vocation
 
-https://journals.openedition.org/abpo/499#:~:text=13La%20seule%20v%C3%A9ritable%20approche,activit%C3%A9%20r%C3%A9alisant%20ainsi%20la%20fonction
+https://journals.openedition.org/abpo/499#:\~:text=13La%20seule%20v%C3%A9ritable%20approche,activit%C3%A9%20r%C3%A9alisant%20ainsi%20la%20fonction
 
 http://veille-et-analyses.ens-lyon.fr/Dossiers/Ens_Sup/Regards/Profession_universitaire.htm
 
@@ -55,31 +63,23 @@ On commence à analyser les auteurs et par conséquent le procès de production.
 
 On continue par les contenus( résume+titre) avec une approche originale de modèle de topic structural.
 
-Un objectif intermédiaire : la constitution d'un corpus en CC et open.
-le sens de la recherche est d'observer les mutations des stratégies de publication et de de contenu. au travers d'une micro histoire quantitative*
-
-
+Un objectif intermédiaire : la constitution d'un corpus en CC et open. le sens de la recherche est d'observer les mutations des stratégies de publication et de de contenu. au travers d'une micro histoire quantitative\*
 
 # Cadre de l'analyse
 
 la production d'un corpus éditorial, une revue, est le fruit de plusieurs processus
 
-- un processus de proposition ; nous n'avons accès qu'à la sélection. 
-- un processus d'acceptation  qui reflète la politique éditoriale
-- un processus de soumissions aux modes du temps, l'actualité peut etre exigeante.
+-   un processus de proposition ; nous n'avons accès qu'à la sélection.
+-   un processus d'acceptation qui reflète la politique éditoriale
+-   un processus de soumissions aux modes du temps, l'actualité peut etre exigeante.
 
 des efforts de la revue pour obtenir des propositions : les coloques
-
-
-
 
 # Le réseau des auteurs
 
 Avant de s'intéresser aux contenus, regardons les acteurs, qui a écrit avec qui?
 
-
 Le corpus total est constitué de 1025 articles, nous allons en identifier les 1070 auteurs et le réseau de leurs co écritures.
-
 
 ## Analyse du nombre d'auteurs par article
 
@@ -178,13 +178,11 @@ ggplot (foo, aes(x=n_seul,y=n_plusieurs))+
 
 ```
 
-### Analyse de la concentration 
+### Analyse de la concentration
 
 Un gini très faible et une trés grande égalité, il n'y a pas pas d'accaparrement de la parole par un ou plusieurs réseaux. Au contraire plusieurs réseaux qui se constituent au cours du temps.
 
 Le coeurs ce sont les 25% des auteurs qui ont publiés plusieurs fois et constituent 40% du corpus. Iles forment une masse primaire à laquelle s'aggrège une grande diversité de contribrution.
-
-
 
 ```{r auth04 }
 
@@ -210,7 +208,6 @@ ggsave("./images/author06.jpeg", width = 27, height = 18, units = "cm")
 ### Le réseaux des co-auteurs
 
 Une part importante n'a écrit que des articles uniques, une part d'entre eux l'ayant écrit avec un co-auteur, on va réduire l'analyse aux auteurs ayant écrit au moins un article avec un autres auteurs
-
 
 ```{r auth04b,}
 library(tidytext)
@@ -267,15 +264,14 @@ ggplot(authors_short %>%filter(membres>5))+
 ggsave("./images/authorClique_b2003.jpeg", width = 27, height = 18, units = "cm")
 
 ```
- On calcule deux éléments : d'abord l'appartenance à des communautés, ensuite la centalité des acteurs.
- 
- 
-Une détection des communautés par un algo fast_greedy est réalisée au préalable. Elle est identifier 215 communautés ce qui est élevé si l'on prend en compte le nombre d’institutions, à moins que la correspondances des cliques et des instituions soit finalement ténue. C'est une relation à explorer et à tester.
+
+On calcule deux éléments : d'abord l'appartenance à des communautés, ensuite la centalité des acteurs.
+
+Une détection des communautés par un algo fast_greedy est réalisée au préalable. Elle est identifier 215 communautés ce qui est élevé si l'on prend en compte le nombre d'institutions, à moins que la correspondances des cliques et des instituions soit finalement ténue. C'est une relation à explorer et à tester.
 
 Le graphe est largement déconnecté et se présentent comme une multiplicité d'archipels apparemment isolés ( il faudrait examiner aussi le réseau des co-citations).
- 
-Le chaînage le plus long réunit 31 individus. Ils sont en mode de 2.
-Le réseaux de co-auteurs est une collections de hardes isolées les unes des autres, c'est aussi le fait d'une collectivité petite qui ne peut développer toutes les ramifications de ses réseaux.  La taille est aussi un terreau.
+
+Le chaînage le plus long réunit 31 individus. Ils sont en mode de 2. Le réseaux de co-auteurs est une collections de hardes isolées les unes des autres, c'est aussi le fait d'une collectivité petite qui ne peut développer toutes les ramifications de ses réseaux. La taille est aussi un terreau.
 
 Une clique d'un graphe non orienté est, en théorie des graphes, un sous-ensemble des sommets de ce graphe dont le sous-graphe induit est complet, c'est-à-dire que deux sommets quelconques de la clique sont toujours adjacents.Ici on utilise une autre notion ( rechercher de meilleures définitions)
 
@@ -293,9 +289,10 @@ ggplot(sizes,aes(x=Freq))+geom_histogram(fill="chartreuse4")+theme_minimal()+
 membership<-membership(c1)
 #crossing(c1, g1)
 ```
+
 On calcule tant qu'à faire la centralité des nœuds et de suite on va la chercher à l'expliquer
 
-la centralité est liée en échelle au nombre de publication, mais la corrélation est lâche. Un modèle lm loglog montre qu'évidemment écrire seul ne contribue pas à la centralité. et que la centralité dépend du nombre de co-authorship mais aussi de la taille du réseau : plus les auteurs du réseau d'un auteurs s'associent et plus il bénéficie de l'effet de centralité. le r2 est substantiel, les p très faibles. 
+la centralité est liée en échelle au nombre de publication, mais la corrélation est lâche. Un modèle lm loglog montre qu'évidemment écrire seul ne contribue pas à la centralité. et que la centralité dépend du nombre de co-authorship mais aussi de la taille du réseau : plus les auteurs du réseau d'un auteurs s'associent et plus il bénéficie de l'effet de centralité. le r2 est substantiel, les p très faibles.
 
 ```{r auth04d}
 
@@ -311,39 +308,25 @@ fit<-lm(log(between+1)~log(n_plusieurs+1)+log(n_seul+1)+log(n+1)+log(membres+1),
 summary(fit)
 
 ```
+
 Reste à donner la carte générale, elle a une forme de boite de petri.
 
 on construit le graphe aves les éléments suivants,
 
- * les noeuds sont constitué des auteurs
- * la taille des noeuds correspond au nombre total d'articles
- * la taille des polices au nombre d'articles écrits à plusieurs auteurs.
- * la couleur des noeuds : les communautés identifiées (cliques) sup à 9 éléments ( le autres sont en gris)
- * la taille des arcs : le nombre d'article auxquels les auteurs sont associés
+-   les noeuds sont constitué des auteurs
+-   la taille des noeuds correspond au nombre total d'articles
+-   la taille des polices au nombre d'articles écrits à plusieurs auteurs.
+-   la couleur des noeuds : les communautés identifiées (cliques) sup à 9 éléments ( le autres sont en gris)
+-   la taille des arcs : le nombre d'article auxquels les auteurs sont associés
 
 On s'apercoit avec cette représentation que le flux des artciles est organisé en deux courants
 
-des auteurs fidèles qui contribuent de manière individuelle répétant un geste de publication
-et ceux qui constituent des réseaux jouant des co -authorings
+des auteurs fidèles qui contribuent de manière individuelle répétant un geste de publication et ceux qui constituent des réseaux jouant des co -authorings
 
-trois types d'acteurs
- * des auteurs occasionnels
- * des auteurs fidèles
- * des auteurs organisés
- 
- 
- ifelse(membership(c1)==1,"lightsalmon",
-                      ifelse(membership(c1)==2,"lightgoldenrod1",
-                             ifelse(membership(c1)==3,"lightcyan2",
-                                    ifelse(membership(c1)==6,"palegreen1",
-                                           ifelse(membership(c1)==7,"lightsalmon3",
-                                                  ifelse(membership(c1)==4,"lightgoldenrod4",
-                                                         ifelse(membership(c1)==8,"lightcyan4", 
-                                                              ifelse(membership(c1)==9,"palegreen3",
-                                                                     ifelse(membership(c1)==10,"orchid1","grey90")))))))))
-                                                                     
-                                                                     
- 
+trois types d'acteurs \* des auteurs occasionnels \* des auteurs fidèles \* des auteurs organisés
+
+ifelse(membership(c1)==1,"lightsalmon", ifelse(membership(c1)==2,"lightgoldenrod1", ifelse(membership(c1)==3,"lightcyan2", ifelse(membership(c1)==6,"palegreen1", ifelse(membership(c1)==7,"lightsalmon3", ifelse(membership(c1)==4,"lightgoldenrod4", ifelse(membership(c1)==8,"lightcyan4", ifelse(membership(c1)==9,"palegreen3", ifelse(membership(c1)==10,"orchid1","grey90")))))))))
+
 ```{r auth04e, fig.width=12,fig.height=12 }
 
 set.seed(1984)
@@ -379,15 +362,14 @@ title("Les constellations des auteurs de PMP",
 
 ce qui produit le champs vient de trois grandes forces
 
- * des héros romantiques
- * des réseaux stratégiques
- * des opportunistes
- 
- la limite, on ne regarde que le labeur pas les héritages.  ce sera une autre histoire par le collège invisible des citations.
- 
- 
- reste à mieux explorer la dynamique des entrants, sortants, et répétéurs?
- 
+-   des héros romantiques
+-   des réseaux stratégiques
+-   des opportunistes
+
+la limite, on ne regarde que le labeur pas les héritages. ce sera une autre histoire par le collège invisible des citations.
+
+reste à mieux explorer la dynamique des entrants, sortants, et répétéurs?
+
 ```{r auth04f, fig.width=12,fig.height=12 }
 corp <- corpus(dn$Author1, docvars=(dn))  # corps des auteueut
 tok <- tokens(corp, remove_punct = FALSE, tolower = FALSE,  include_docvars = TRUE)
