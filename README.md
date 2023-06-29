@@ -1,11 +1,10 @@
 # PMP 40 ans d'histoire
 
 
-Analyses pour le papier de PMP
+Analyses pour les 40 ans de de PMP
 
+1 - [Compter les mots](https://benaventc.github.io/PMP/script2023_01.html)
 
-1 - [Caractéristiques générales](https://benaventc.github.io/PMP/script2023_01.html)
+2 - [Réseaux d'auteurs](https://benaventc.github.io/PMP/script2023_05_network.html)
 
-2 - [Word counting](https://benaventc.github.io/PMP/script2023_01.html)
-
-3 - [Doc2vec approach](https://benaventc.github.io/PMP/script2023_02_w2c.html)
+3 - [Approche Doc2vec ](https://benaventc.github.io/PMP/script2023_02_w2c.html)
