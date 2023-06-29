@@ -2,11 +2,11 @@
 "0","    locale = locale(encoding = ""WINDOWS-1252""))"
 "2","Warning: One or more parsing issues, see `problems()` for details"
 "2","[1mRows: [22m[34m1081[39m [1mColumns: [22m[34m87[39m"
-"2","[36m--[39m [1mColumn specification[22m [36m-----------------------------------------------------------------------------------[39m
+"2","[36m--[39m [1mColumn specification[22m [36m---------------------------------------------------------------------------------------------------------------------[39m
 [1mDelimiter:[22m "",""
-[31mchr[39m  (24): Key, Item Type, Author, Title, Publication Title, ISSN, DOI, Url, Abstract Note, Date, Pages...
+[31mchr[39m  (24): Key, Item Type, Author, Title, Publication Title, ISSN, DOI, Url, Abstract Note, Date, Pages, Issue, Journal Abbreviation, Sho...
 [32mdbl[39m   (2): Publication Year, Volume
-[33mlgl[39m  (58): ISBN, Num Pages, Number Of Volumes, Series, Series Number, Series Text, Publisher, Type, Arc...
+[33mlgl[39m  (58): ISBN, Num Pages, Number Of Volumes, Series, Series Number, Series Text, Publisher, Type, Archive, Archive Location, Call Numbe...
 [34mdttm[39m  (3): date2, date3, Access Date"
 "2","
 [36mi[39m Use `spec()` to retrieve the full column specification for this data.

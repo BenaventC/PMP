@@ -1,0 +1,4 @@
+"0","fviz_pca_var(res.pca, axes= c(3,4),col.var = ""cos2"","
+"0","             gradient.cols = c(""white"", ""#E7E200"", ""#FA5E07""),"
+"0","             repel = TRUE # Évite le chevauchement de texte"
+"0","             )"

@@ -70,21 +70,21 @@ dn<-PMP %>%
 
 ## Une appoche par embeddings : un simple word2vec
 
-pq ? 
+pq ?
 
-simple, endogène . Un bert possible mais ne reflète pas la langue dans cette revue, on écarte donc l'option de modèle préèentrainés. 
+simple, endogène . Un bert possible mais ne reflète pas la langue dans cette revue, on écarte donc l'option de modèle préèentrainés.
 
 Comment ?
 
-a) vectoriser les mots / tokens
-b) vectoriser les documents
-c) vectoriser les concepts
+a)  vectoriser les mots / tokens
+b)  vectoriser les documents
+c)  vectoriser les concepts
 
-D'autre méthodes ? Il y en a beaucup^s un essai avec paragragh to vec
+D'autre méthodes ? Il y en a beaucup\^s un essai avec paragragh to vec
 
-La suite est un relatif échec. On reste à l'approche la plus simple. 
+La suite est un relatif échec. On reste à l'approche la plus simple.
 
-On utilise un modèle particulier qui est paragraph2vec. Analogie à word to vec il comprend un token supplémentaire qui est le document, vectorisé dans le même espace que celui des mots. Ce qu'on peut en attendre-   résoudre simultanéement l'embeddings des termes et celui des documents -    un apport d'information par l'identification du document. Mais comment çà oeuvre ?
+On utilise un modèle particulier qui est paragraph2vec. Analogie à word to vec il comprend un token supplémentaire qui est le document, vectorisé dans le même espace que celui des mots. Ce qu'on peut en attendre- résoudre simultanéement l'embeddings des termes et celui des documents - un apport d'information par l'identification du document. Mais comment çà oeuvre ?
 
 On utilise le package `Word2vec` de bnozacs ( à préciser)
 
@@ -92,10 +92,9 @@ les étapes
 
 ## Une approche de cleaning par annotation
 
-La stratégie est de s'appuyer sur une annotation intégrale des textes. 
+La stratégie est de s'appuyer sur une annotation intégrale des textes.
 
 `Udpipe`
-
 
 ```{r 03}
 
@@ -120,8 +119,8 @@ g
 ggsave("./images/pos01.jpeg", plot=g , width = 27, height = 18, units = "cm")
 
 ```
-On manipule les données pour construire un dictionnaire quantitatif
 
+On manipule les données pour construire un dictionnaire quantitatif
 
 ```{r 04}
 
@@ -157,9 +156,9 @@ ggplot(tokens_lemma2, aes(x=tf))+geom_density(kernel = "gaussian")+scale_x_log10
 
 ```
 
-## filtrage des termes 
+## filtrage des termes
 
-On va filtrer cependant le vocabulaire et s'appuyer sur les lemmes de manière à réduire les variations morphologiques. 
+On va filtrer cependant le vocabulaire et s'appuyer sur les lemmes de manière à réduire les variations morphologiques.
 
 ```{r 05}
 
@@ -173,8 +172,7 @@ text<-toks%>%
 
 ```
 
-On a donc un vocabulaire de $n$ mots et un volume de $M$101 000 mots environ répartit en ```$N$```  955 textes.
-
+On a donc un vocabulaire de $n$ mots et un volume de \$M$101 000 mots environ répartit en ```$N\$\`\`\` 955 textes.
 
 ## Construction du modèle
 
@@ -183,7 +181,6 @@ les hyper paramètre : 800 dim pour allez au plus est saisir le sémantique plut
 une fenêtre plutoto large dans ce contexte les corrélations sot longues
 
 le minimum fixé à 4 , car on ne veut rien perdre
-
 
 ```{r 06}
 #library(word2vec)
@@ -322,8 +319,7 @@ fig
 
 ## tester des concepts
 
-Un concept est formé d'une phrase composée des mots clés qui s'y rapportent, on les élabore progressivement par ajustements successif en les empruntant dans le dictionnaire. 
-
+Un concept est formé d'une phrase composée des mots clés qui s'y rapportent, on les élabore progressivement par ajustements successif en les empruntant dans le dictionnaire.
 
 ```{r 010}
 
@@ -358,14 +354,13 @@ ggplot(cos2, aes(x=Performance))+geom_histogram(binwidth=.02) +xlim(0, 1)
 
 foo<- cos2 %>%group_by(Year)%>%summarise(Gestion = mean(Gestion, na.rm=TRUE))
 
-ggplot(cos2, aes(x=Year, y=Gestion, group=1))+
-  geom_smooth(method="loess", alpha=0.1,span=0.45)+
+ggplot(cos2, aes(x=Year, y=Performance, group=1))+
+  geom_smooth(method="loess", alpha=0.1,span=0.25)+
   scale_color_manual(values = col)+
   scale_y_continuous(labels=scales::percent, limits=c(NA, NA))+
-  labs(y="similarité", x=NULL, title = "Gestion")
+  labs(y="similarité", x=NULL, title = "Performance")
 
-ggsave("./images/keyword2.jpeg", width = 27, height = 18, units = "cm")
+ggsave("./images/keyword_w2v.jpeg", width = 27, height = 18, units = "cm")
 
 
 ```
-

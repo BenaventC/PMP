@@ -1,0 +1,8 @@
+"0","dn_year<-dn %>% "
+"0","  group_by(Year) %>% "
+"0","  summarise(n_paper=mean(n_words))"
+"0","ggplot(dn_year, aes(x=Year,y=n_paper))+"
+"0","  geom_smooth(method = ""loess"", span=0.35)+"
+"0","  ylim(1,2.5)+"
+"0","  theme_minimal()+"
+"0","  labs(title=""Evolution du nombre d'auteurs par article"",y=""nombre moyen d'auteurs par article"",x=""Année de publication"",caption=""corpus PMP"")"

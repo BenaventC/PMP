@@ -1,0 +1,4 @@
+"0","saveWidget(fig, ""p1.html"", selfcontained = T, libdir = ""lib"")
+"
+"1","[WARNING] Deprecated: --self-contained. use --embed-resources --standalone
+"

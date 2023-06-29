@@ -1,10 +1,10 @@
 "0","PMP <- read_csv(""./data/PMPLast.csv"")"
 "2","[1mRows: [22m[34m1025[39m [1mColumns: [22m[34m87[39m"
-"2","[36m--[39m [1mColumn specification[22m [36m-------------------------------------------------------------------------------------------------[39m
+"2","[36m--[39m [1mColumn specification[22m [36m---------------------------------------------------------------------------------------------------------------------[39m
 [1mDelimiter:[22m "",""
-[31mchr[39m  (25): Key, Item Type, Author, Title, Publication Title, ISSN, DOI, Url, Abstract Note, Date, Pages, Issue, Journ...
+[31mchr[39m  (25): Key, Item Type, Author, Title, Publication Title, ISSN, DOI, Url, Abstract Note, Date, Pages, Issue, Journal Abbreviation, Sho...
 [32mdbl[39m   (2): Publication Year, Volume
-[33mlgl[39m  (57): ISBN, Num Pages, Number Of Volumes, Series Number, Series Text, Publisher, Type, Archive, Archive Location...
+[33mlgl[39m  (57): ISBN, Num Pages, Number Of Volumes, Series Number, Series Text, Publisher, Type, Archive, Archive Location, Call Number, Notes...
 [34mdttm[39m  (3): Date Added, Date Modified, Access Date"
 "2","
 [36mi[39m Use `spec()` to retrieve the full column specification for this data.

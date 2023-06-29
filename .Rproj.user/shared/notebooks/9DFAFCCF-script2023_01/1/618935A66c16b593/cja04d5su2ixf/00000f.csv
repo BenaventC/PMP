@@ -1,0 +1,8 @@
+"0","foo<-dn %>%
+  select(Key,Year,15:70
+         ) %>% 
+  pivot_longer(-c(Key, Year), names_to = ""variable"", values_to = ""taux"") %>%
+  group_by(Year, variable)%>%
+  summarise(taux=mean(taux, na.rm=TRUE))
+"
+"2","`summarise()` has grouped output by 'Year'. You can override using the `.groups` argument."

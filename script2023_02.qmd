@@ -81,7 +81,7 @@ les étapes
 ### 1 constitution du data set
 
 ```{r 06a}
-#library(doc2vec)
+library(doc2vec)
 
 
 # On constitue le corpus
@@ -143,23 +143,24 @@ text<- cbind(toks$Key, text) %>%
 
 model <- paragraph2vec(x = text, 
                        type = "PV-DBOW", 
-                       dim = 200, 
+                       dim = 400, 
                        iter = 1000, 
                        window=5,
-                       min_count = 15, 
+                       min_count = 10, 
                        lr = 0.05, 
                        threads = 4)
 
 predict(model, newdata = c("gestion","management"), which="word2word",type = "nearest", top_n=30)
 
-emb_pred<-predict(model, newdata = c("gestion", "management"), which="words",type = "embedding", top_n=30)
+emb_pred<-predict(model, newdata = c("gestion", "management"), which="words",type = "embedding")
 
 
-x <- setNames(object = c("performance service", "management", NA), 
-              nm = c("a", "b", "c"))
+x <- setNames(object = c("performance service", "management"), 
+              nm = c("a", "b"))
 emb <- predict(model, newdata = x, which="docs", type = "embedding")
 emb
 
+cor(t(emb_pred))
 
 ```
 
@@ -184,7 +185,7 @@ library(FactoMineR)
 #res.pca <- PCA(t(emb), graph = FALSE)
 #fviz_eig(res.pca, addlabels = TRUE, ylim = c(0, 50))
 #fviz_pca_var(res.pca, col.var = "black")
-
+library(uwot)
 
 word_umap <- as.data.frame(umap(emb, n_neighbors = 3,   n_components = 2,
 learning_rate = 0.5, init = "random")) %>%
@@ -216,24 +217,23 @@ p<-ggplot(foo, aes(label = words, size = tfidf)) +
   scale_size_area(max_size = 4) +
   theme_minimal()+
   facet_wrap(~mytree)
-
+p
 ggsave("./images/vector00.jpeg", plot=p,width = 27, height = 18, units = "cm")
 
-
+library(plotly)
 
 p<-ggplot(foo, aes(x=V1,y=V2, group=words))+
   geom_text(aes(label=words, size=tfidf, color=mytree))
+
+ggsave("./images/vector01.jpeg", width = 27, height = 18, units = "cm")
 
 fig <- ggplotly(p)
 
 fig
 
-#+scale_size(range = c(.5, 3))
-
-ggsave("./images/vector01.jpeg", width = 27, height = 18, units = "cm")
-
 library(htmlwidgets)
-saveWidget(fig, "p1.html", selfcontained = F, libdir = "lib")
+saveWidget(fig, "p1.html", selfcontained = T, libdir = "lib",
+           title="espace des mots PMP")
 
 ```
 
@@ -315,16 +315,32 @@ ggsave("./images/vector05.jpeg", plot=p,width = 27, height = 18, units = "cm")
 
 ```
 
+
 ```{r 10}
+library(lsa)
+foo<-cbind(dn, emb_doc)%>%
+  select(Key,Year, 14:413) %>%
+  pivot_longer(-c(Key, Year), names_to="embeddings", values_to = "value")%>%
+  group_by(Year,embeddings)%>%
+  summarise(mean_year=mean(value))
 
-predict(model, newdata = c("gestion","management"), which="word2word",type = "nearest", top_n=30)
+foo1<-foo %>%
+  pivot_wider(id_cols="Year",
+  names_from = "embeddings", 
+  values_from = "mean_year")%>%
+  drop_na()%>%
+  column_to_rownames(var="Year")
 
-emb_pred<-predict(model, newdata = c("gestion", "management"), which="words",type = "embedding", top_n=30)
 
+doc_umap <- as.data.frame(umap(foo1, n_neighbors = 5,   
+                               n_components = 2,
+                               learning_rate = 0.5, 
+                               init = "random"))%>%
+  rename(d1=V1, d2=V2)%>%
+  rownames_to_column(var="Year")
 
-x <- setNames(object = c("performance service", "management", NA), 
-              nm = c("a", "b", "c"))
-emb <- predict(model, newdata = x, which="docs", type = "embedding")
-emb
-
+ggplot(doc_umap, aes(x=d1, y=d2)) +
+  geom_text(aes( label= Year))+
+  theme_minimal()
+p
 ```
